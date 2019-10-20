@@ -18,6 +18,8 @@ from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import read_structure_step
+from .utils import guess_extension
+from . import formats
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -152,6 +154,38 @@ class ReadStructure(seamm.Node):
         self.analyze()
 
         return next_node
+
+    def _read(self, file_name, extension=None):
+        """
+        Calls the appropriate functions to parse the requested
+        file.
+    
+        Parameters
+        ----------
+        file_names: str
+            Name of the file
+    
+        Returns
+        -------
+        ret : dict
+            A dictionary with the information of the input files. 
+            The structure of the dictionary is the SEAMM structure format.
+        """
+    
+        if file_name is None:
+            raise NameError('read_structure_step: The file name for the structure file was not specified.')
+    
+        if extension is None:
+    
+            extension = guess_extension(file_name)
+    
+            if extension not in formats.registries.REGISTERED_READERS.keys():
+                raise KeyError('read_structure_step: the file format %s was not recognized.' % extension)
+
+        reader = formats.registries.REGISTERED_READERS[extension]
+    
+        return reader(file_name)
+
 
     def analyze(self, indent='', **kwargs):
         """Do any analysis of the output from this step.
