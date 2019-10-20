@@ -113,30 +113,22 @@ class ReadStructure(seamm.Node):
         The dictionary of control values is passed in as P so that
         the code can test values, etc.
 
-        Parameters:
+        Keyword arguments:
             P: An optional dictionary of the current values of the control
                parameters.
-
-        Returns:
-            None
         """
 
         if not P:
             P = self.parameters.values_to_dict()
 
-        text = ('Please replace this with a short summary of the '
-                'Read Structure step, including key parameters.')
+        if P['file'] == '' and self.unknown != '':
+            P['file'] = self.unknown[1]
+        text = 'Read structure from {}'.format(P['file'])
 
-        return self.header + '\n' + __(text, **P, indent=4 * ' ').__str__()
+        return text
 
     def run(self):
         """Run a Read Structure step.
-
-        Parameters:
-            None
-
-        Returns:
-            None
         """
 
         next_node = super().run(printer)
@@ -144,9 +136,8 @@ class ReadStructure(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
-
-        # Print what we are doing
-        printer.important(__(self.description_text(P), indent=self.indent))
+        if P['file'] == ''and self.unknown != '':
+            P['file'] = self.unknown[1]
 
         # Temporary code just to print the parameters. You will need to change
         # this!
@@ -161,7 +152,6 @@ class ReadStructure(seamm.Node):
         self.analyze()
 
         return next_node
-
 
     def analyze(self, indent='', **kwargs):
         """Do any analysis of the output from this step.

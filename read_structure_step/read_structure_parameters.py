@@ -32,16 +32,15 @@ class ReadStructureParameters(seamm.Parameters):
     parameter can be set to a variable of expression, indicated by having '$'
     as the first character in the field.
     """
-
     parameters = {
-        "time": {
-            "default": 100.0,
-            "kind": "float",
-            "default_units": "ps",
+        "file": {
+            "default": "",
+            "kind": "string",
+            "default_units": "",
             "enumeration": tuple(),
-            "format_string": ".1f",
-            "description": "Simulation time:",
-            "help_text": ("The time to simulate in the dynamics run.")
+            "format_string": "s",
+            "description": "Structure file:",
+            "help_text": ("The file containing the structure.")
         },
     }
 
