@@ -1,5 +1,3 @@
-from . import registries
-
 import os
 import pkgutil
 import sys

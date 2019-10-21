@@ -18,8 +18,6 @@ from seamm_util import ureg, Q_  # noqa: F401
 import seamm_util.printing as printing
 from seamm_util.printing import FormattedText as __
 import read_structure_step
-from .utils import guess_extension
-from . import formats
 
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
@@ -177,12 +175,12 @@ class ReadStructure(seamm.Node):
     
         if extension is None:
     
-            extension = guess_extension(file_name)
+            extension = read_structure_step.utils.guess_extension(file_name)
     
-            if extension not in formats.registries.REGISTERED_READERS.keys():
+            if extension not in read_structure_step.formats.registries.REGISTERED_READERS.keys():
                 raise KeyError('read_structure_step: the file format %s was not recognized.' % extension)
 
-        reader = formats.registries.REGISTERED_READERS[extension]
+        reader = read_structure_step.formats.registries.REGISTERED_READERS[extension]
     
         return reader(file_name)
 

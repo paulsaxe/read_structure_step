@@ -1,5 +1,5 @@
 import os
-from . import formats
+import read_structure_step
 
 
 def guess_extension(file_name, with_file_name=False):
@@ -11,10 +11,10 @@ def guess_extension(file_name, with_file_name=False):
     with open(file_name, 'r') as file:
         data = file.read()
 
-        available_extensions = formats.registries.REGISTERED_FORMAT_CHECKERS.keys()
+        available_extensions = read_structure_step.formats.registries.REGISTERED_FORMAT_CHECKERS.keys()
 
         for extension in available_extensions:
 
-            extension_checker = formats.registries.REGISTERED_FORMAT_CHECKERS[extension]
+            extension_checker = read_structure_step.formats.registries.REGISTERED_FORMAT_CHECKERS[extension]
             if extension_checker(data) is True:
                 return (extension)
