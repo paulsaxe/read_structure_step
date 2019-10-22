@@ -42,7 +42,7 @@ setup(
     # Which Python importable modules should be included when your package is
     # installed, handled automatically by setuptools. Use 'exclude' to prevent
     # some specific subpackage(s) from being added, if needed
-    packages=find_packages(include=['read_structure_step']),
+    packages=find_packages(),
 
     # Optional include package data to ship with your package. Customize
     # MANIFEST.in if the general case does not suit your needs. Comment out
