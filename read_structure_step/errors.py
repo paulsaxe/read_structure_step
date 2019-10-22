@@ -3,3 +3,6 @@ class Error(Exception):
 
 class Mol2Error(Error):
     pass
+
+class XYZError(Error):
+    pass
