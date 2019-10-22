@@ -12,6 +12,7 @@ from read_structure_step.read_structure import ReadStructure  # noqa: F401
 from read_structure_step.read_structure_parameters import ReadStructureParameters  # noqa: F401
 from read_structure_step.read_structure_step import ReadStructureStep  # noqa: F401
 from read_structure_step.tk_read_structure import TkReadStructure  # noqa: F401
+from . import read
 
 # Handle versioneer
 from ._version import get_versions
