@@ -6,9 +6,9 @@ keywords = ['@<TRIPOS>']
 @register_format_checker('.mol2')
 def check_format(file_name):
 
-    with open(file_name, "r") as file:
+    with open(file_name, "r") as f:
 
-        data = file.read()
+        data = f.read()
     
         if all(keyword in data for keyword in keywords):
             return True

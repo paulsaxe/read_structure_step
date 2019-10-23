@@ -7,9 +7,9 @@ def check_format(file_name):
             
     element_coords_regex= r"^\s*(A[cglmrstu]|B[aehikr]?|C[adeflmnorsu]?|D[bsy]|E[rsu]|F[elmr]?|G[ade]|H[efgos]?|I[nr]?|Kr?|L[airuv]|M[dgnot]|N[abdeiop]?|Os?|P[abdmortu]?|R[abefghnu]|S[bcegimnr]?|T[abcehilm]|U(u[opst])?|V|W|Xe|Yb?|Z[nr])\s*(\s*-?\d+(\.\d+(e\d+)?)?\s*){3}$"
 
-    with open(file_name, "r") as file:
+    with open(file_name, "r") as f:
 
-        for line_nbr, line in enumerate(file):
+        for line_nbr, line in enumerate(f):
 
             if line_nbr > 2:
                 break
