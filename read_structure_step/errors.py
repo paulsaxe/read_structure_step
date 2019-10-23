@@ -6,3 +6,6 @@ class Mol2Error(Error):
 
 class XYZError(Error):
     pass
+
+class PDBError(Error):
+    pass

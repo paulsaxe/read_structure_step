@@ -16,3 +16,9 @@ def test_single_xyz():
 
     xyz_file = build_filenames.build_data_filename('spc.xyz')
     xyz_parsed = read_structure_step.read(xyz_file)
+
+
+def test_single_pdb():
+
+    pdb_file = build_filenames.build_data_filename('hydrolase.pdb')
+    pdb_parsed = read_structure_step.read(pdb_file)
