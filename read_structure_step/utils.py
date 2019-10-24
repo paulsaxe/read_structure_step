@@ -23,7 +23,7 @@ def guess_extension(file_name, with_file_name=False):
 def sanitize_file_format(file_format):
 
     if re.match(r"^\.*([a-zA-Z\d]+)", file_format) is None:
-        raise KeyError("read_structure_step: the file format %s was not recognized" % file_format)
+        raise KeyError("read_structure_step: the file format %s could not be validated" % file_format)
 
     file_format = file_format.lower()
     

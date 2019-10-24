@@ -19,15 +19,15 @@ def test_empty_filename():
     with pytest.raises(NameError):
         read_structure_step.read('')
 
-def test_unregistered_readers():
+def test_unregistered_reader():
     
     with pytest.raises(KeyError):
 
         xyz_file = build_filenames.build_data_filename('spc.xyz')
         read_structure_step.read(xyz_file, extension='.mp3')
 
-@pytest.mark.parametrize("extension", [None, ".xyz", "xyz", "XYZ"])
-def test_single_xyz_file(extension):
+@pytest.mark.parametrize("extension", [None, ".xyz", "xyz", "XYZ", "xYz"])
+def test_extensions(extension):
 
     xyz_file = build_filenames.build_data_filename("spc.xyz") 
     parsed_xyz = read_structure_step.read(xyz_file, extension=extension) 
