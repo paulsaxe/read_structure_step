@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""Tests for `read_structure_step` package."""
+"""Tests for `read.py` module."""
 
 import pytest  # noqa: F401
 import read_structure_step  # noqa: F401
@@ -25,17 +25,3 @@ def test_unregistered_reader():
 
         xyz_file = build_filenames.build_data_filename('spc.xyz')
         read_structure_step.read(xyz_file, extension='.mp3')
-
-@pytest.mark.parametrize("extension", [None, ".xyz", "xyz", "XYZ", "xYz"])
-def test_extensions(extension):
-
-    xyz_file = build_filenames.build_data_filename("spc.xyz") 
-    parsed_xyz = read_structure_step.read(xyz_file, extension=extension) 
-    
-    assert len(parsed_xyz["atoms"]["elements"]) == 3
-    assert all(atom in ["O", "H", "H"] for atom in parsed_xyz["atoms"]["elements"])
-    assert len(parsed_xyz["atoms"]["coordinates"]) == 3
-    assert all(len(point) == 3 for point in parsed_xyz["atoms"]["coordinates"])
-    assert len(parsed_xyz["bonds"]) == 2
-    assert any(bond == (2, 1, 'single') for bond in parsed_xyz["bonds"])
-    assert any(bond == (3, 1, 'single') for bond in parsed_xyz["bonds"])
