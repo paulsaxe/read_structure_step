@@ -1,21 +1,25 @@
+"""
+The public interface to the read_structure_step SEAMM plugin
+"""
+
 from . import utils
 from . import formats
 
 def read(file_name, extension=None):
     """
-    Calls the appropriate functions to parse the requested
-    file.
+    Calls the appropriate functions to parse the requested file.
 
     Parameters
     ----------
-    file_names: str
+    file_name: str
         Name of the file
+
+    extension: str, optional, default: None
 
     Returns
     -------
-    ret : dict
-        A dictionary with the information of the input files. 
-        The structure of the dictionary is the SEAMM structure format.
+    dict
+        A SEAMM structure with the structure information contained in the input files. 
     """
 
     if type(file_name) is not str:

@@ -1,3 +1,7 @@
+"""
+Implementation of the reader for XYZ files using OpenBabel
+"""
+
 import os
 import seamm
 import seamm_util
@@ -8,7 +12,7 @@ from ..which import which
 obabel_error_identifiers= ['0 molecules converted']
 
 @register_reader('.xyz')
-def load_mol2(file_name):
+def load_xyz(file_name):
         obabel_exe = which('obabel') 
         local = seamm.ExecLocal()
 

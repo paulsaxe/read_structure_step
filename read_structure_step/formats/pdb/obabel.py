@@ -1,3 +1,7 @@
+"""
+Implementation of the reader for PDB files using OpenBabel
+"""
+
 import os
 import seamm
 import seamm_util
@@ -8,7 +12,7 @@ from ..which import which
 obabel_error_identifiers= ['0 molecules converted']
 
 @register_reader('.pdb')
-def load_mol2(file_name):
+def load_pdb(file_name):
         obabel_exe = which('obabel') 
         local = seamm.ExecLocal()
 

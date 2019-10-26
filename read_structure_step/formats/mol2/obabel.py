@@ -1,3 +1,8 @@
+"""
+Implementation of the reader for Mol2 files using OpenBabel
+"""
+
+
 import os
 import seamm
 import seamm_util
