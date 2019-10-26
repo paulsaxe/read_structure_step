@@ -2,9 +2,6 @@ REGISTERED_READERS = {}
 
 def register_reader(file_format):
 
-    if file_format is None:
-        raise ValueError('register_reader: File format not specified for reader.')
-
     def decorator_function(fn):
 
         REGISTERED_READERS[file_format] = fn
@@ -20,9 +17,6 @@ def register_reader(file_format):
 REGISTERED_FORMAT_CHECKERS= {}
 
 def register_format_checker(file_format):
-
-    if file_format is None:
-        raise ValueError('register_reader: File format not specified for reader.')
 
     def decorator_function(fn):
 
