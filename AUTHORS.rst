@@ -5,7 +5,7 @@ Credits
 Development Lead
 ----------------
 
-* Eliseo Marin-R-Rimoldi <meliseo@vt.edu>
+* Eliseo Marin-Rimoldi <meliseo@vt.edu>
 
 Contributors
 ------------
