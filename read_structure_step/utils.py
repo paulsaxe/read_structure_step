@@ -21,9 +21,13 @@ def guess_extension(file_name, with_file_name=False):
     extension: str
         The file format.
     """
-
+    
     if with_file_name is True:
         (root, ext) = os.path.splitext(file_name)
+
+        if ext == '':
+            raise NameError("read_structure_step: format cannot be guessed from file name")
+
         return ext.lower()
 
     available_extensions = formats.registries.REGISTERED_FORMAT_CHECKERS.keys()
