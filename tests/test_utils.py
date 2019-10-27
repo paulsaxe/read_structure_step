@@ -20,8 +20,8 @@ def test_extensions(file_name, extension):
     assert len(parsed_xyz["atoms"]["coordinates"]) == 3
     assert all(len(point) == 3 for point in parsed_xyz["atoms"]["coordinates"])
     assert len(parsed_xyz["bonds"]) == 2
-    assert any(bond == (2, 1, 'single') for bond in parsed_xyz["bonds"])
-    assert any(bond == (3, 1, 'single') for bond in parsed_xyz["bonds"])
+    assert any(set(bond) == set((2, 1, 'single')) for bond in parsed_xyz["bonds"])
+    assert any(set(bond) == set((3, 1, 'single')) for bond in parsed_xyz["bonds"])
 
 def test_sanitize_file_format_regex_validation():
 
