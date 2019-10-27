@@ -29,12 +29,8 @@ def read(file_name, extension=None):
         raise NameError('read_structure_step: The file name for the structure file was not specified.')
 
     if extension is None:
-
         try:
             extension = utils.guess_extension(file_name, with_file_name=True)
-
-            if extension not in formats.registries.REGISTERED_READERS.keys():
-                raise KeyError('read_structure_step: the file format %s was not recognized.' % extension)
 
         except:
             extension = utils.guess_extension(file_name, with_file_name=False)
@@ -42,6 +38,8 @@ def read(file_name, extension=None):
     else:
         extension = utils.sanitize_file_format(extension)
 
+    if extension not in formats.registries.REGISTERED_READERS.keys():
+        raise KeyError('read_structure_step: the file format %s was not recognized.' % extension)
 
     reader = formats.registries.REGISTERED_READERS[extension]
 
