@@ -42,6 +42,7 @@ Example
 -------
 
 .. code:: python
+
  import read_structure_step
  seamm_structure = read_structure_step.read("spc.xyz")
 
