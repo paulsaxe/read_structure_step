@@ -49,8 +49,6 @@ Example
 Credits
 =======
 
-Copyright (c) 2018, Molecular Software Sciences Institute (MolSSI)
-
 This package was created with Cookiecutter_ and the `molssi-seamm/cookiecutter-seamm-plugin`_ project template.
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter

@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Read Structure Step'
-copyright = u"2019, Eliseo Marin-R-Rimoldi"
+copyright = u"2019, The Molecular Sciences Software Institute"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -210,7 +210,7 @@ latex_elements = {
 latex_documents = [
     ('index', 'read_structure_step.tex',
      u'Read Structure Step Documentation',
-     u'Eliseo Marin-R-Rimoldi', 'manual'),
+     u'The Molecular Sciences Software Institute', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at
@@ -241,7 +241,7 @@ latex_documents = [
 man_pages = [
     ('index', 'read_structure_step',
      u'Read Structure Step Documentation',
-     [u'Eliseo Marin-R-Rimoldi'], 1)
+     [u'The Molecular Sciences Software Institute'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -256,7 +256,7 @@ man_pages = [
 texinfo_documents = [
     ('index', 'read_structure_step',
      u'Read Structure Step Documentation',
-     u'Eliseo Marin-R-Rimoldi',
+     u'The Molecular Sciences Software Institute',
      'read_structure_step',
      'One line description of project.',
      'Miscellaneous'),
