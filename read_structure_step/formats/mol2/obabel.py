@@ -18,7 +18,7 @@ def load_mol2(file_name):
         local = seamm.ExecLocal()
 
         result = local.run(
-             cmd=[obabel_exe, '-imol2', file_name, '-omol', '-x3']
+             cmd=[obabel_exe, '-f 1', '-l 1', '-imol2', file_name, '-omol', '-x3']
         )
         for each_error in obabel_error_identifiers:
             if each_error in result['stderr']:

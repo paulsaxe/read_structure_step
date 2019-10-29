@@ -30,10 +30,10 @@ def read(file_name, extension=None):
 
     if extension is None:
         try:
-            extension = utils.guess_extension(file_name, with_file_name=True)
+            extension = utils.guess_extension(file_name, use_file_name=True)
 
         except:
-            extension = utils.guess_extension(file_name, with_file_name=False)
+            extension = utils.guess_extension(file_name, use_file_name=False)
 
     else:
         extension = utils.sanitize_file_format(extension)

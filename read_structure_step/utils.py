@@ -3,7 +3,7 @@ from . import formats
 import re
 
 
-def guess_extension(file_name, with_file_name=False):
+def guess_extension(file_name, use_file_name=False):
     """
     Returns the file format. It can either use the file name extension or guess based on
     signatures found in the file.
@@ -13,7 +13,7 @@ def guess_extension(file_name, with_file_name=False):
     file_name: str
         Name of the file
 
-    with_file_name: bool, optional, default: False
+    use_file_name: bool, optional, default: False
         If set to True, uses the file name extension to identify the file format.
 
     Returns
@@ -22,7 +22,7 @@ def guess_extension(file_name, with_file_name=False):
         The file format.
     """
     
-    if with_file_name is True:
+    if use_file_name is True:
         (root, ext) = os.path.splitext(file_name)
 
         if ext == '':

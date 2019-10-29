@@ -17,7 +17,7 @@ def load_pdb(file_name):
         local = seamm.ExecLocal()
 
         result = local.run(
-             cmd=[obabel_exe, '-ipdb', file_name, '-omol', '-x3']
+             cmd=[obabel_exe, '-f 1', '-l 1', '-ipdb', file_name, '-omol', '-x3']
         )
         for each_error in obabel_error_identifiers:
             if each_error in result['stderr']:
