@@ -8,7 +8,7 @@ extensibility.
 REGISTERED_READERS = {}
 
 def register_reader(file_format):
-
+    
     def decorator_function(fn):
 
         REGISTERED_READERS[file_format] = fn

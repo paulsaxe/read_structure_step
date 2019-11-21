@@ -150,7 +150,9 @@ class ReadStructure(seamm.Node):
             )
 
         # Analyze the results
-        print(read(P['file']))
+        structure = read(P['file'])
+
+        seamm.data.structure = structure
 
         self.analyze()
 

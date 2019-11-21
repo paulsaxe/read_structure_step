@@ -33,3 +33,19 @@ def test_format(structure):
     assert any(set(bond) == set((5, 8, 'single')) for bond in parsed_file["bonds"])
     assert any(set(bond) == set((6, 9, 'single')) for bond in parsed_file["bonds"])
     assert any(set(bond) == set((6, 10, 'single')) for bond in parsed_file["bonds"])
+
+def test_mopac():
+
+    file_name = build_filenames.build_data_filename('acetonitrile.mop')
+    parsed_file = read_structure_step.read(file_name)
+
+    assert len(parsed_file["atoms"]["elements"]) == 6
+    assert all(atom in ["H", "H", "H", "C", "C", "N"] for atom in parsed_file["atoms"]["elements"])
+    assert len(parsed_file["atoms"]["coordinates"]) == 6
+    assert all(len(point) == 3 for point in parsed_file["atoms"]["coordinates"])
+    assert len(parsed_file["bonds"]) == 5
+    assert any(set(bond) == set((2, 1, 'single')) for bond in parsed_file["bonds"])
+    assert any(set(bond) == set((6, 1, 'triple')) for bond in parsed_file["bonds"])
+    assert any(set(bond) == set((5, 2, 'single')) for bond in parsed_file["bonds"])
+    assert any(set(bond) == set((2, 3, 'single')) for bond in parsed_file["bonds"])
+    assert any(set(bond) == set((2, 4, 'single')) for bond in parsed_file["bonds"])

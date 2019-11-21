@@ -21,3 +21,7 @@ class PDBError(Error):
 class SDFError(Error):
     """ Class for exceptions raised by the SDF module in read_structure_step"""
     pass
+
+class MopError(Error):
+    """ Class for exceptions raised by the MOPAC module in read_structure_step"""
+    pass

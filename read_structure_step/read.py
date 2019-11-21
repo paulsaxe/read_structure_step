@@ -42,5 +42,5 @@ def read(file_name, extension=None):
         raise KeyError('read_structure_step: the file format %s was not recognized.' % extension)
 
     reader = formats.registries.REGISTERED_READERS[extension]
-
+    
     return reader(file_name)
