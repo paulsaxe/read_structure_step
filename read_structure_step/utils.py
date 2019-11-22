@@ -41,6 +41,7 @@ def guess_extension(file_name, use_file_name=False):
         if extension_checker(file_name) is True:
             return extension
 
+
 def sanitize_file_format(file_format):
     """
     Returns a uniform file format string.

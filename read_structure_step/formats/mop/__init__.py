@@ -1,6 +1,5 @@
 from read_structure_step.formats.registries import register_format_checker
 from . import obabel  # noqa: F401
-import os
 
 keywords = [
     '0SCF',

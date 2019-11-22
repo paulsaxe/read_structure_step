@@ -56,6 +56,7 @@ def test_format(structure):
         set(bond) == set((6, 10, 'single')) for bond in parsed_file["bonds"]
     )
 
+
 @pytest.mark.skipif(mopac_exists() is False, reason="MOPAC could not be found")
 def test_mopac():
 
