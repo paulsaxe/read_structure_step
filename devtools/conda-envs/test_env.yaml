@@ -1,9 +1,11 @@
 name: test
 channels:
+  - conda-forge
 dependencies:
     # Base depends
   - python
   - pip
+  - conda-forge::openbabel
 
     # Testing
   - pytest
