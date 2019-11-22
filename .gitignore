@@ -17,6 +17,10 @@ tramp
 # VStudio
 .vscode
 
+# MOPAC
+*.arc
+*.out
+
 # flymake-mode
 *_flymake.*
 
