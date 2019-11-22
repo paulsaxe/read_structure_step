@@ -1,9 +1,6 @@
 from read_structure_step.formats.registries import register_format_checker
-from .mopac import run_mopac
 from . import obabel  # noqa: F401
 import os
-
-mopac_error_identifiers = ['UNRECOGNIZED KEY-WORDS']
 
 keywords = [
     '0SCF',
@@ -285,26 +282,4 @@ def check_format(file_name):
         if any(keyword in data for keyword in keywords):
             return True
         else:
-
-            output_file = get_output_file(file_name)
-
-            if output_file is not None:
-                return True
-            else:
-                return False
-
-
-def get_output_file(input_file):
-
-    run_mopac(input_file)
-
-    output_file = os.path.splitext(input_file)[0] + '.out'
-
-    with open(output_file, "r") as f:
-
-        data = f.read()
-
-        if any(keyword in data for keyword in mopac_error_identifiers):
-            return None
-        else:
-            return output_file
+            return False
