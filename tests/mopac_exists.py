@@ -9,9 +9,10 @@ def mopac_exists():
         try:
             mopac_path = os.path.split(os.environ['mopac'])[0]
         except KeyError:
-            mopac_path = os.environ['MOPAC_LICENSE']
-        except KeyError:
-            raise FileNotFoundError('The MOPAC executable could not be found')
+            try:
+                mopac_path = os.environ['MOPAC_LICENSE']
+            except KeyError:
+                return False
 
         mopac_exe = mopac_path + 'MOPAC2016.exe'
 
