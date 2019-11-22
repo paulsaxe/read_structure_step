@@ -8,8 +8,9 @@ dependencies:
     # Testing
   - pytest
   - pytest-cov
+  - flake8 
 
     # Pip-only installs
   - pip:
     - codecov
-
+    - yapf
