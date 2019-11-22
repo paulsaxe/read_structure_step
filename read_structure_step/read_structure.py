@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """Non-graphical part of the Read Structure step in a SEAMM flowchart
 
 In addition to the normal logger, two logger-like printing facilities are
@@ -34,10 +35,8 @@ def upcase(string):
 
 
 class ReadStructure(seamm.Node):
-    def __init__(self,
-                 flowchart=None,
-                 title='Read Structure',
-                 extension=None):
+
+    def __init__(self, flowchart=None, title='Read Structure', extension=None):
         """A step for Read Structure in a SEAMM flowchart.
 
         You may wish to change the title above, which is the string displayed
@@ -45,7 +44,6 @@ class ReadStructure(seamm.Node):
 
         Parameters:
             flowchart: The flowchart that contains this step.
-            
             title: The name displayed in the flowchart.
 
             extension: ??
@@ -91,9 +89,8 @@ class ReadStructure(seamm.Node):
             logger.setLevel(self.options.read_structure_step_log_level)
 
         super().__init__(
-            flowchart=flowchart,
-            title='Read Structure',
-            extension=extension)
+            flowchart=flowchart, title='Read Structure', extension=extension
+        )
 
         self.parameters = read_structure_step.ReadStructureParameters()
 
@@ -137,16 +134,22 @@ class ReadStructure(seamm.Node):
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
         )
-        if P['file'] == ''and self.unknown != '':
+        if P['file'] == '' and self.unknown != '':
             P['file'] = self.unknown[1]
 
         # Temporary code just to print the parameters. You will need to change
         # this!
         for key in P:
             print('{:>15s} = {}'.format(key, P[key]))
-            printer.normal(__(
-                '{key:>15s} = {value}', key=key, value=P[key],
-                indent=4*' ', wrap=False, dedent=False)
+            printer.normal(
+                __(
+                    '{key:>15s} = {value}',
+                    key=key,
+                    value=P[key],
+                    indent=4 * ' ',
+                    wrap=False,
+                    dedent=False
+                )
             )
 
         # Analyze the results
@@ -172,8 +175,12 @@ class ReadStructure(seamm.Node):
         Returns
             None
         """
-        printer.normal(__(
-            'This is a placeholder for the results from the '
-            'Read Structure step', indent=4*' ', wrap=True,
-            dedent=False
-        ))
+        printer.normal(
+            __(
+                'This is a placeholder for the results from the '
+                'Read Structure step',
+                indent=4 * ' ',
+                wrap=True,
+                dedent=False
+            )
+        )

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 """Helper class needed for the stevedore integration.
 
 This must provide a description() method that returns a dict containing a
@@ -12,10 +13,7 @@ import read_structure_step
 
 class ReadStructureStep(object):
     my_description = {
-        'description':
-            (
-                'An interface for Read Structure'
-            ),
+        'description': ('An interface for Read Structure'),
         'group': 'Simulations',
         'name': 'Read Structure'
     }

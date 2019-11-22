@@ -14,13 +14,15 @@ def test_read_filename_type(file_name):
     with pytest.raises(TypeError):
         read_structure_step.read(file_name)
 
+
 def test_empty_filename():
-    
+
     with pytest.raises(NameError):
         read_structure_step.read('')
 
+
 def test_unregistered_reader():
-    
+
     with pytest.raises(KeyError):
 
         xyz_file = build_filenames.build_data_filename('spc.xyz')

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+
 """The graphical part of a Read Structure step"""
 
 import seamm
 from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_widgets as sw
-import read_structure_step
 import Pmw
 import pprint  # noqa: F401
 import tkinter as tk
@@ -58,7 +58,8 @@ class TkReadStructure(seamm.TkNode):
             defaultbutton='OK',
             master=self.toplevel,
             title='Edit Read Structure step',
-            command=self.handle_dialog)
+            command=self.handle_dialog
+        )
         self.dialog.withdraw()
 
         # The information about widgets is held in self['xxxx'], i.e. this
@@ -141,7 +142,8 @@ class TkReadStructure(seamm.TkNode):
         if result != "OK":
             self.dialog.deactivate(result)
             raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result))
+                "Don't recognize dialog result '{}'".format(result)
+            )
 
         self.dialog.deactivate(result)
         # Shortcut for parameters

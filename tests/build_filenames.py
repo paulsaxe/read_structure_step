@@ -1,5 +1,6 @@
 import os
 
+
 def build_data_filename(*filename):
     # Make sure file exists
     test_dir = os.path.dirname(os.path.abspath(__file__))
@@ -8,6 +9,7 @@ def build_data_filename(*filename):
     fname = os.path.join(data_dir, *filename)
 
     return fname
+
 
 def build_scratch_filename(filename):
     test_dir = os.path.dirname(os.path.abspath(__file__))

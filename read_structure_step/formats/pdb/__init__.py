@@ -1,10 +1,20 @@
-from . import obabel
 from read_structure_step.formats.registries import register_format_checker
-import re
+from . import obabel  # noqa: F401
 
-mandatory_keywords=["HEADER","TITLE","COMPND","SOURCE","KEYWDS","EXPDTA","AUTHOR","REVDAT","REMARK 2","REMARK 3","SEQRES","CRYST1","ORIGX1 ORIGX2 ORIGX3","SCALE1 SCALE2 SCALE3","MASTER","END"]
+mandatory_keywords = [
+    "HEADER", "TITLE", "COMPND", "SOURCE", "KEYWDS", "EXPDTA", "AUTHOR",
+    "REVDAT", "REMARK 2", "REMARK 3", "SEQRES", "CRYST1",
+    "ORIGX1 ORIGX2 ORIGX3", "SCALE1 SCALE2 SCALE3", "MASTER", "END"
+]
 
-optional_keywords = ["OBSLTE","SPLIT","CAVEAT","NUMMDL","MDLTYP","SPRSDE","JRNL","REMARK 0","REMARK 1","REMARK N","DBREF","DBREF1/DBREF2","SEQADV","MODRES","HET","HETNAM","HETSYN","FORMUL","HELIX","SHEET","SSBOND","LINK","CISPEP","SITE","MTRIX1 MTRIX2 MTRIX3","MODEL","ATOM","ANISOU","TER","HETATM","ENDMDL","CONECT"]
+optional_keywords = [
+    "OBSLTE", "SPLIT", "CAVEAT", "NUMMDL", "MDLTYP", "SPRSDE", "JRNL",
+    "REMARK 0", "REMARK 1", "REMARK N", "DBREF", "DBREF1/DBREF2", "SEQADV",
+    "MODRES", "HET", "HETNAM", "HETSYN", "FORMUL", "HELIX", "SHEET", "SSBOND",
+    "LINK", "CISPEP", "SITE", "MTRIX1 MTRIX2 MTRIX3", "MODEL", "ATOM",
+    "ANISOU", "TER", "HETATM", "ENDMDL", "CONECT"
+]
+
 
 @register_format_checker('.pdb')
 def check_format(file_name):
@@ -21,5 +31,3 @@ def check_format(file_name):
                 return True
             else:
                 return False
-
-

@@ -5,7 +5,6 @@ Control parameters for the Read Structure step in a SEAMM flowchart
 
 import logging
 import seamm
-import pprint
 
 logger = logging.getLogger(__name__)
 
