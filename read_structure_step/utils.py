@@ -27,9 +27,7 @@ def guess_extension(file_name, use_file_name=False):
         (root, ext) = os.path.splitext(file_name)
 
         if ext == '':
-            raise NameError(
-                "read_structure_step: format cannot be guessed from file name"
-            )
+            return None
 
         return ext.lower()
 
@@ -41,8 +39,7 @@ def guess_extension(file_name, use_file_name=False):
             extension]
 
         if extension_checker(file_name) is True:
-            return (extension)
-
+            return extension
 
 def sanitize_file_format(file_format):
     """

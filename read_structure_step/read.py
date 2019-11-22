@@ -37,14 +37,18 @@ def read(file_name, extension=None):
         )
 
     if extension is None:
-        try:
-            extension = utils.guess_extension(file_name, use_file_name=True)
+        
+        extension = utils.guess_extension(file_name, use_file_name=True)
 
-        except (NameError):
+        if extension is None:
+
             extension = utils.guess_extension(file_name, use_file_name=False)
 
     else:
         extension = utils.sanitize_file_format(extension)
+
+    if extension is None:
+        raise NameError("Extension could not be identified")
 
     if extension not in formats.registries.REGISTERED_READERS.keys():
         raise KeyError(
