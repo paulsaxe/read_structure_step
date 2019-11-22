@@ -1,6 +1,3 @@
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
 language: python
 
 before_install:
@@ -14,7 +11,6 @@ before_install:
   - python -V
 
 install:
-
     # Create test environment for package
   - python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
     # Activate the test environment
@@ -26,7 +22,6 @@ install:
   - conda list
   - pip freeze
 
-
 matrix:
   fast_finish: true
 
@@ -36,16 +31,14 @@ notifications:
 stages:
   - lint
   - test
-- deploy
+  - deploy
 
 jobs:
   include:
     - stage: lint
       name: "Check formatting of code for PEP-8"
       os: linux
-
       language: generic
-
       env: PYTHON_VER=3.7
       script:
         - flake8 read_structure_step tests
@@ -72,9 +65,7 @@ jobs:
       script:
         - pytest -v tests/
       os: linux
-
       language: generic  # No need to set Python version since its conda
-
       env: PYTHON_VER=3.6
 
     - stage: test
@@ -84,11 +75,10 @@ jobs:
       after_success:
         - codecov
       os: linux
-
       language: generic
-
       env: PYTHON_VER=3.7
-- stage: deploy
+
+    - stage: deploy
       name: "Deploy to PyPi"
       if: tag IS present
       dist: xenial
@@ -105,73 +95,4 @@ jobs:
           tags: true
         user: seamm
         password:
-          secure: PLEASE_REPLACE_ME
-
-# Config file for automatic testing at travis-ci.org
-# This file will be regenerated if you run travis_pypi_setup.py
-
-language: python
-
-# Run jobs on container-based infrastructure, can be overridden per job
-
-matrix:
-  include:
-    # Extra includes for OSX since python language is not available by default on OSX
-    - os: osx
-      language: generic
-      env: PYTHON_VER=3.6
-    - os: osx
-      language: generic
-      env: PYTHON_VER=3.7
-
-
-    - os: linux
-      language: generic  # No need to set Python version since its conda
-      env: PYTHON_VER=3.6
-    - os: linux
-      language: generic
-      env: PYTHON_VER=3.7
-
-
-before_install:
-    # Additional info about the build
-  - uname -a
-  - df -h
-  - ulimit -a
-
-    # Install the Python environment
-  - source devtools/travis-ci/before_install.sh
-  - python -V
-
-install:
-
-    # Create test environment for package
-  - python devtools/scripts/create_conda_env.py -n=test -p=$PYTHON_VER devtools/conda-envs/test_env.yaml
-    # Activate the test environment
-  - conda activate test
-    # Build and install package
-  - python setup.py develop --no-deps
-
-
-script:
-  - pytest -v --cov=read_structure_step tests/
-
-notifications:
-    email: false
-
-after_success:
-  - codecov
-
-# After you create the Github repo and add it to Travis, run the
-# travis_pypi_setup.py script to finish PyPI deployment setup
-deploy:
-  provider: pypi
-  distributions: sdist bdist_wheel
-  skip_existing: true
-  user: seamm
-  password:
-    secure: "NuLaBk5JXWA52RImi1ekBkOrD/hrM80tVGgGHfCvFLNCZCMppWLkN/RrcTH4hdjXVcSTQpGiTC1ohAZMAk6tXZhLfmwrkyKQjSUoWGFe/1N99QpyrTPCixZ48lczHVGClDvRSzaCYhrqZqzbIkQvHQ2Qor5Oj7IDTqYKf6NFqBNhO7S8ryhuBEL4gnoHW715FFy2BP1jq03DC1botjqln80ILv1+VviAEZDMUCL9ey4rxSWWH6X6uRGdFfx2qyGZeHc+bWbTO0P9AsP/gBFXPTJSXj3uMqB7MrdofKNs4bjDCcfCleJiuEo2StuOK8OR9B0M+EG9b4S1f+SdduskWp1sEqqk2W+GQ9rHlJyYPIl29Z3zxVf4/SrB1khm2hHjs7nOe7jJi5NuZq9pz/imANDn/mwAce3AvQpeWLPOGJ7oSgNkjqQ1bGKxdz8Rng8/z8JtqzNsx957CPZUOHysbKTTZrAR+79NrqZn187Q5TKIZS94vk3/riQo+4vcemD/tL0cL5tL1Tad53+856XKLz/wsN6eepIgAQ59LTA7I2u++o8konfurQrFAum/aX47Z1f/kWMwT8ieLiegW0yop5keTQAvab7FsoIToWQVgx3IDKD4p4F4UyyEw8VKbrvl5kgJ00xHKOV4V7PrGnXgsnvFTbxQzGnhCR4boaUxM6g="
-  on:
-    tags: true
-    repo: molssi-seamm/read_structure_step
-    condition: "$TRAVIS_OS_NAME = linux"
+          secure: "NuLaBk5JXWA52RImi1ekBkOrD/hrM80tVGgGHfCvFLNCZCMppWLkN/RrcTH4hdjXVcSTQpGiTC1ohAZMAk6tXZhLfmwrkyKQjSUoWGFe/1N99QpyrTPCixZ48lczHVGClDvRSzaCYhrqZqzbIkQvHQ2Qor5Oj7IDTqYKf6NFqBNhO7S8ryhuBEL4gnoHW715FFy2BP1jq03DC1botjqln80ILv1+VviAEZDMUCL9ey4rxSWWH6X6uRGdFfx2qyGZeHc+bWbTO0P9AsP/gBFXPTJSXj3uMqB7MrdofKNs4bjDCcfCleJiuEo2StuOK8OR9B0M+EG9b4S1f+SdduskWp1sEqqk2W+GQ9rHlJyYPIl29Z3zxVf4/SrB1khm2hHjs7nOe7jJi5NuZq9pz/imANDn/mwAce3AvQpeWLPOGJ7oSgNkjqQ1bGKxdz8Rng8/z8JtqzNsx957CPZUOHysbKTTZrAR+79NrqZn187Q5TKIZS94vk3/riQo+4vcemD/tL0cL5tL1Tad53+856XKLz/wsN6eepIgAQ59LTA7I2u++o8konfurQrFAum/aX47Z1f/kWMwT8ieLiegW0yop5keTQAvab7FsoIToWQVgx3IDKD4p4F4UyyEw8VKbrvl5kgJ00xHKOV4V7PrGnXgsnvFTbxQzGnhCR4boaUxM6g="
