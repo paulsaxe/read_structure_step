@@ -6,7 +6,6 @@
 import pytest  # noqa: F401
 import read_structure_step  # noqa: F401
 from . import build_filenames
-from .mopac_exists import mopac_exists
 
 
 @pytest.mark.parametrize(
@@ -57,7 +56,10 @@ def test_format(structure):
     )
 
 
-@pytest.mark.skipif(mopac_exists() is False, reason="MOPAC could not be found")
+@pytest.mark.skipif(
+    read_structure_step.formats.mop.find_mopac.find_mopac() is None,
+    reason="MOPAC could not be found"
+)
 def test_mopac():
 
     file_name = build_filenames.build_data_filename('acetonitrile.mop')

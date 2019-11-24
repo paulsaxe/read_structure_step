@@ -8,7 +8,7 @@ import seamm_util
 from read_structure_step.errors import MopError
 from read_structure_step.formats.registries import register_reader
 from ..which import which
-from .mopac import run_mopac
+from .find_mopac import find_mopac
 
 obabel_error_identifiers = ['0 molecules converted']
 
@@ -40,7 +40,12 @@ def load_mop(file_name):
 
     except MopError:
 
-        run_mopac(file_name)
+        mopac_exe = find_mopac()
+
+        if mopac_exe is None:
+            raise FileNotFoundError('The MOPAC executable could not be found')
+        local = seamm.ExecLocal()
+        local.run(cmd=[mopac_exe, file_name])
 
         output_file = os.path.splitext(file_name)[0] + '.out'
 

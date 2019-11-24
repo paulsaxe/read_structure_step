@@ -6,7 +6,7 @@ import os
 mopac_error_identifiers = []
 
 
-def run_mopac(file_name):
+def find_mopac():
 
     try:
         mopac_exe = '/opt/mopac/MOPAC2016.exe'
@@ -44,9 +44,5 @@ def run_mopac(file_name):
                 mopac_exe = seamm_util.check_executable("MOPAC2016.exe")
 
                 if mopac_exe is False:
-                    raise FileNotFoundError(
-                        'The MOPAC executable could not be found'
-                    )
-    local = seamm.ExecLocal()
-
-    local.run(cmd=[mopac_exe, file_name])
+                    return None
+    return mopac_exe
