@@ -6,7 +6,6 @@ mopac_error_identifiers = []
 
 
 def find_mopac():
-    print('here')
     try:
         mopac_exe = '/opt/mopac/MOPAC2016.exe'
 
