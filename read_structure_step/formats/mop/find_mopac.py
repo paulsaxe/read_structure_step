@@ -1,4 +1,3 @@
-import seamm
 import seamm_util
 from pathlib import Path
 import os
