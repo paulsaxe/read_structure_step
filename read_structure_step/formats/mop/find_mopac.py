@@ -6,7 +6,7 @@ mopac_error_identifiers = []
 
 
 def find_mopac():
-
+    print('here')
     try:
         mopac_exe = '/opt/mopac/MOPAC2016.exe'
 
@@ -40,8 +40,9 @@ def find_mopac():
                     )
 
             except (KeyError, FileNotFoundError):
-                mopac_exe = seamm_util.check_executable("MOPAC2016.exe")
-
-                if mopac_exe is False:
+                try:
+                    mopac_exe = seamm_util.check_executable("MOPAC2016.exe")
+                except FileNotFoundError:
                     return None
+
     return mopac_exe
