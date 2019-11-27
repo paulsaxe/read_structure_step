@@ -44,10 +44,41 @@ def load_mop(file_name):
 
         if mopac_exe is None:
             raise FileNotFoundError('The MOPAC executable could not be found')
-        local = seamm.ExecLocal()
-        local.run(cmd=[mopac_exe, file_name])
 
-        output_file = os.path.splitext(file_name)[0] + '.out'
+        with open(file_name, "r") as f:
+            data = f.read()
+
+            hamiltonians = [
+                'AM1',
+                'MNDO',
+                'MNDOD',
+                'PM3',
+                'PM6',
+                'PM6-D3',
+                'PM6-DH+',
+                'PM6-DH2',
+                'PM6-DH2X',
+                'PM6-D3H4',
+                'PM6-D3H4X',
+                'PM7',
+                'PM7-TS',
+                'RM1',
+            ]
+            
+            for hamiltonian in hamiltonians:
+                if hamiltonian in data:
+                   data = data.replace(hamiltonian, "0SCF", 1)
+                   break
+
+        tmp_file = os.path.dirname(file_name) + "/_0SCFTemp.mop"
+
+        with open(tmp_file, "w") as f:
+            f.write(data)
+
+        local = seamm.ExecLocal()
+        local.run(cmd=[mopac_exe, tmp_file])
+            
+        output_file = os.path.dirname(file_name) + '/_0SCFTemp.out'
 
         obabel_exe = which('obabel')
         local = seamm.ExecLocal()
@@ -68,5 +99,8 @@ def load_mop(file_name):
         mol = result['stdout']
 
         structure = seamm_util.molfile.to_seamm(mol)
+
+        os.remove(tmp_file)
+        os.remove(output_file)
 
         return structure
