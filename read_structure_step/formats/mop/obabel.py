@@ -64,11 +64,11 @@ def load_mop(file_name):
                 'PM7-TS',
                 'RM1',
             ]
-            
+
             for hamiltonian in hamiltonians:
                 if hamiltonian in data:
-                   data = data.replace(hamiltonian, "0SCF", 1)
-                   break
+                    data = data.replace(hamiltonian, "0SCF", 1)
+                    break
 
         tmp_file = os.path.dirname(file_name) + "/_0SCFTemp.mop"
 
@@ -77,7 +77,7 @@ def load_mop(file_name):
 
         local = seamm.ExecLocal()
         local.run(cmd=[mopac_exe, tmp_file])
-            
+
         output_file = os.path.dirname(file_name) + '/_0SCFTemp.out'
 
         obabel_exe = which('obabel')
