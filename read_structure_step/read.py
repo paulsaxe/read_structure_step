@@ -4,6 +4,7 @@ The public interface to the read_structure_step SEAMM plugin
 
 from . import utils
 from . import formats
+import os
 
 
 def read(file_name, extension=None):
@@ -35,6 +36,8 @@ def read(file_name, extension=None):
             """read_structure_step: The file name for the structure file
             was not specified."""
         )
+
+    file_name = os.path.abspath(file_name)
 
     if extension is None:
 
