@@ -90,6 +90,9 @@ def load_mop(file_name):
             ]
         )
 
+        os.remove(tmp_file)
+        os.remove(output_file)
+
         for each_error in obabel_error_identifiers:
             if each_error in result['stderr']:
                 raise MopError(
@@ -100,7 +103,5 @@ def load_mop(file_name):
 
         structure = seamm_util.molfile.to_seamm(mol)
 
-        os.remove(tmp_file)
-        os.remove(output_file)
 
         return structure
