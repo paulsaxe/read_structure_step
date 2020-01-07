@@ -15,54 +15,17 @@ import re
 def _find_charge(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
-#        return "CHARGE={}".format(text.group(2))
         return text.group(2)
-
-#def _find_charge(regex, f):
-#    data = f.read()
-#    text = re.search(regex, data)
-#    f.seek(0)
-#    if text is not None:
-#        return "CHARGE={}".format(text.group(2))
-
 
 def _find_standard(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
         return text.group(0)
 
-#def _find_standard(regex, f):
-#    data = f.read()
-#    text = re.search(regex, data)
-#    f.seek(0)
-#    if text is not None:
-#        return text.group(0)
-
-
-#def _find_symmetry(regex, input_file):
-#    split = input_file.split("\n")
-#    block = []
-#    for line in split:
-#        text = re.search(regex, line)
-#        if text is not None:
-#            block.append(text.group(0))
-#    if len(block) > 0:
-#        return ''.join(block)
-
 def _find_field(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
         return (text.group(2), text.group(5), text.group(8)) 
-
-#def _find_symmetry(regex, f):
-#    block = []
-#    for line in f:
-#        text = re.search(regex, line)
-#        if text is not None:
-#            block.append(text.group(0))
-#    f.seek(0)
-#    if len(block) > 0:
-#        return ''.join(block)
 
 def _find_open(regex, input_file):
     text = re.search(regex, input_file)
@@ -84,12 +47,6 @@ extras = {
                         "find": _find_field,
                         "value": None,
                     },
-                    #"symmetry":
-                    #{
-                    #    "regex": r"^(\s*\d+\s*)+$",
-                    #    "find": _find_symmetry,
-                    #    "value": None,
-                    #},
                     "open":
                     {
                         "regex": r"(OPEN\()(\d+)\,\s*(\d+)\)",
@@ -126,12 +83,6 @@ def load_mop(file_name):
             for ko, vo in v.items():
                 regex = extras[k][ko]['regex']
                 extras[k][ko]["value"] = vo["find"](regex, input_file)
-
-
-#        for k, v in extras.items():
-#            for ko, vo in v.items():
-#                regex = extras[k][ko]['regex']
-#                extras[k][ko]["value"] = vo["find"](regex, f)
 
     try:
 
