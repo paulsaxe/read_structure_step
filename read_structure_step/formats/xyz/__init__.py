@@ -10,7 +10,7 @@ def check_format(file_name):
             ?|D[bsy]|E[rsu]|F[elmr]?|G[ade]|H[efgos]?|I[nr]?|Kr?|L[airuv] \
             |M[dgnot]|N[abdeiop]?|Os?|P[abdmortu]?|R[abefghnu]|S[bcegimnr\]?| \
             T[abcehilm]|U(u[opst])?|V|W|Xe|Yb?|Z[nr \
-            ])\s*(\s*-?\d+(\.\d+(e\d+)?)?\s*){3}$"""
+            ])\s*(\s*-?\d+(\.\d+([-+]e\d+)?)?\s*){3}$"""
 
     with open(file_name, "r") as f:
 
