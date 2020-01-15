@@ -25,7 +25,7 @@ def _find_standard(regex, input_file):
 def _find_field(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
-        return (text.group(2), text.group(5), text.group(8)) 
+        return (text.group(1), text.group(4), text.group(7)) 
 
 def _find_open(regex, input_file):
     text = re.search(regex, input_file)
@@ -43,7 +43,7 @@ extras = {
                     },
                     "field":
                     {
-                        "regex": r"(FIELD=\()([-+]?\d+(\.\d+(e[-+]\d+)?)?\,)([-+]?\d+(\.\d+(e[-+]\d+)?)?\,)([-+]?\d+(\.\d+(e[-+]\d+)?)?)\)",
+                        "regex": r"FIELD=\(([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?)?)\)",
                         "find": _find_field,
                         "value": None,
                     },
@@ -85,7 +85,6 @@ def load_mop(file_name):
                 extras[k][ko]["value"] = vo["find"](regex, input_file)
 
     try:
-
         obabel_exe = which('obabel')
         local = seamm.ExecLocal()
 
