@@ -54,22 +54,6 @@ extras = {
                         "value": None,
                     },
                 },
-            "methods":
-                {
-                    "UHF":
-                    {
-                        "regex": r"UHF",
-                        "find": _find_standard,
-                        "value": None,
-                    },
-                    "PULAY":
-                    {
-                        "regex": r"PULAY",
-                        "find": _find_standard,
-                        "value": None,
-                    },
-                },
-
         }
 
 obabel_error_identifiers = ['0 molecules converted']
