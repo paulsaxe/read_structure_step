@@ -17,46 +17,56 @@ def _find_charge(regex, input_file):
     if text is not None:
         return text.group(2)
 
+
 def _find_standard(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
         return text.group(0)
 
+
 def _find_field(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
-        return (text.group(1), text.group(4), text.group(7)) 
+        return (text.group(1), text.group(4), text.group(7))
+
 
 def _find_open(regex, input_file):
     text = re.search(regex, input_file)
     if text is not None:
         return (text.group(2), text.group(3))
 
+
 extras = {
-            "structure":
+    "structure":
+        {
+            "net_charge":
                 {
-                    "net_charge":
-                    {
-                        "regex": r"(CHARGE=)([\+\-]?\d)",
-                        "find": _find_charge,
-                        "value": None,
-                    },
-                    "field":
-                    {
-                        "regex": r"FIELD=\(([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?)?)\)",
-                        "find": _find_field,
-                        "value": None,
-                    },
-                    "open":
-                    {
-                        "regex": r"(OPEN\()(\d+)\,\s*(\d+)\)",
-                        "find": _find_open,
-                        "value": None,
-                    },
+                    "regex": r"(CHARGE=)([\+\-]?\d)",
+                    "find": _find_charge,
+                    "value": None,
                 },
-        }
+            "field":
+                {
+                    "regex":
+                        (
+                            r"FIELD=\(([-+]?\d+(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+"
+                            r"(\.\d+(e[-+]\d+)?)?)\,([-+]?\d+(\.\d+(e[-+]\d+)?"
+                            r")?)\)"
+                        ),
+                    "find": _find_field,
+                    "value": None,
+                },
+            "open":
+                {
+                    "regex": r"(OPEN\()(\d+)\,\s*(\d+)\)",
+                    "find": _find_open,
+                    "value": None,
+                },
+        },
+}
 
 obabel_error_identifiers = ['0 molecules converted']
+
 
 @register_reader('.mop')
 def load_mop(file_name):
@@ -129,12 +139,11 @@ def load_mop(file_name):
         local = seamm.ExecLocal()
         local.run(cmd=[mopac_exe, tmp_file])
 
-
         output_file = os.path.dirname(file_name) + '/_0SCFTemp.out'
 
         obabel_exe = which('obabel')
         local = seamm.ExecLocal()
-    
+
         result = local.run(
             cmd=[
                 obabel_exe, '-f 1', '-l 1', '-imoo', output_file, '-omol',
