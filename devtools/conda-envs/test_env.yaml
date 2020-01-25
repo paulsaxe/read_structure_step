@@ -5,14 +5,21 @@ dependencies:
     # Base depends
   - python
   - pip
+  - configargparse
   - conda-forge::openbabel
 
     # Testing
+  - coverage
+  - flake8 
   - pytest
   - pytest-cov
-  - flake8 
 
     # Pip-only installs
   - pip:
     - codecov
+    - seamm
+    - seamm-util
+    - seamm-widgets
+
+    # Testing
     - yapf
