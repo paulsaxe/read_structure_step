@@ -2,23 +2,29 @@
 Read Structure Step
 ===================
 
-
 .. image:: https://img.shields.io/travis/molssi-seamm/read_structure_step.svg
    :target: https://travis-ci.org/molssi-seamm/read_structure_step
-.. image:: https://pyup.io/repos/github/molssi-seamm/read_structure_step/shield.svg
-   :target: https://pyup.io/repos/github/molssi-seamm/read_structure_step/
-      :alt: Updates
-
+   :alt: Build Status
 
 .. image:: https://codecov.io/gh/molssi-seamm/read_structure_step/branch/master/graph/badge.svg
    :target: https://codecov.io/gh/molssi-seamm/read_structure_step
+   :alt: Code Coverage
 
-.. image:: https://readthedocs.org/projects/read-structure-step/badge/?version=latest
-   :target: https://read-structure-step.readthedocs.io/en/latest/?badge=latest
-      :alt: Documentation Status
+.. image:: https://img.shields.io/lgtm/grade/python/g/molssi-seamm/read_structure_step.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/molssi-seamm/read_structure_step/context:python
+   :alt: Code Quality
+
+.. image:: https://readthedocs.org/projects/read_structure-step/badge/?version=latest
+   :target: https://read_structure-step.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/molssi-seamm/read_structure_step/shield.svg
+   :target: https://pyup.io/repos/github/molssi-seamm/read_structure_step/
+   :alt: Updates for Dependencies
 
 .. image:: https://img.shields.io/pypi/v/read_structure_step.svg
    :target: https://pypi.python.org/pypi/read_structure_step
+   :alt: PyPi VERSION
 
 Description
 ===========
