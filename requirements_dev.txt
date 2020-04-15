@@ -6,6 +6,6 @@ tox
 coverage
 Sphinx
 cryptography
-PyYAML>5.1
+PyYAML>5.3.1
 pytest
 pytest-runner
