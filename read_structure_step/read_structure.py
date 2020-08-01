@@ -140,7 +140,6 @@ class ReadStructure(seamm.Node):
         # Temporary code just to print the parameters. You will need to change
         # this!
         for key in P:
-            print('{:>15s} = {}'.format(key, P[key]))
             printer.normal(
                 __(
                     '{key:>15s} = {value}',
