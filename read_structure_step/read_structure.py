@@ -11,7 +11,6 @@ will do in the initial summary of the job.
 directory, and is used for all normal output from this step.
 """
 
-import configargparse
 import logging
 import seamm
 from seamm import data  # noqa: F401
@@ -24,14 +23,6 @@ from .read import read
 logger = logging.getLogger(__name__)
 job = printing.getPrinter()
 printer = printing.getPrinter('Read Structure')
-
-
-def upcase(string):
-    """Return an uppercase version of the string.
-
-    Used for the type argument in argparse/
-    """
-    return string.upper()
 
 
 class ReadStructure(seamm.Node):
@@ -53,40 +44,9 @@ class ReadStructure(seamm.Node):
         """
         logger.debug('Creating Read Structure {}'.format(self))
 
-        # Argument/config parsing
-        self.parser = configargparse.ArgParser(
-            auto_env_var_prefix='',
-            default_config_files=[
-                '/etc/seamm/read_structure_step.ini',
-                '/etc/seamm/seamm.ini',
-                '~/.seamm/read_structure_step.ini',
-                '~/.seamm/seamm.ini',
-            ]
-        )
-
-        self.parser.add_argument(
-            '--seamm-configfile',
-            is_config_file=True,
-            default=None,
-            help='a configuration file to override others'
-        )
-
-        # Options for this plugin
-        self.parser.add_argument(
-            "--read-structure-step-log-level",
-            default=configargparse.SUPPRESS,
-            choices=[
-                'CRITICAL', 'ERROR', 'WARNING', 'INFO', 'DEBUG', 'NOTSET'
-            ],
-            type=upcase,
-            help="the logging level for the Read Structure step"
-        )
-
-        self.options, self.unknown = self.parser.parse_known_args()
-
         # Set the logging level for this module if requested
-        if 'read_structure_step_log_level' in self.options:
-            logger.setLevel(self.options.read_structure_step_log_level)
+        # if 'read_structure_step_log_level' in self.options:
+        #     logger.setLevel(self.options.read_structure_step_log_level)
 
         super().__init__(
             flowchart=flowchart, title='Read Structure', extension=extension
