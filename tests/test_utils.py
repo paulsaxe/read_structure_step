@@ -26,9 +26,7 @@ def test_extensions(file_name, extension):
     read_structure_step.read(xyz_file, system, extension=extension)
 
     assert system.n_atoms() == 3
-    assert all(
-        atom in ["O", "H", "H"] for atom in system.atoms.symbols()
-    )
+    assert all(atom in ["O", "H", "H"] for atom in system.atoms.symbols())
 
     coordinates = system.atoms.coordinates()
     assert len(coordinates) == 3

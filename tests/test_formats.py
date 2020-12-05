@@ -79,8 +79,8 @@ def test_mopac():
 
     assert system.n_atoms() == 6
     assert all(
-        atom in ["H", "H", "H", "C", "C", "N"] for atom in
-        system.atoms.symbols()
+        atom in ["H", "H", "H", "C", "C", "N"]
+        for atom in system.atoms.symbols()
     )
     coordinates = system.atoms.coordinates()
     assert len(coordinates) == 6
