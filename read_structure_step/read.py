@@ -7,22 +7,23 @@ from . import formats
 import os
 
 
-def read(file_name, extension=None):
+def read(file_name, system, extension=None):
     """
     Calls the appropriate functions to parse the requested file.
 
     Parameters
     ----------
-    file_name: str
+    file_name : str
         Name of the file
 
-    extension: str, optional, default: None
+    system : System
+        The SEAMM system to read into
+
+    extension : str, optional, default: None
 
     Returns
     -------
-    dict
-        A SEAMM structure with the structure information contained in the
-        input files.
+    None
     """
 
     if type(file_name) is not str:
@@ -61,4 +62,4 @@ def read(file_name, extension=None):
 
     reader = formats.registries.REGISTERED_READERS[extension]
 
-    return reader(file_name)
+    reader(file_name, system)

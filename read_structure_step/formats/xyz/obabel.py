@@ -3,7 +3,6 @@ Implementation of the reader for XYZ files using OpenBabel
 """
 
 import seamm
-import seamm_util
 from read_structure_step.errors import XYZError
 from read_structure_step.formats.registries import register_reader
 from ..which import which
@@ -12,7 +11,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.xyz')
-def load_xyz(file_name):
+def load_xyz(file_name, system):
 
     obabel_exe = which('obabel')
     local = seamm.ExecLocal()
@@ -26,6 +25,4 @@ def load_xyz(file_name):
 
     mol = result['stdout']
 
-    structure = seamm_util.molfile.to_seamm(mol)
-
-    return structure
+    system.from_molfile_text(mol)
