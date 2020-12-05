@@ -1,5 +1,1 @@
-configargparse==1.2
-Pmw==2.0.1
-seamm==0.9
-seamm-util==0.9
-seamm-widgets==0.9
+seamm==2020.12.4

@@ -21,12 +21,8 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = [
-    'Pmw>=2.0.1',
-    'seamm>=0.2.0',
-    'seamm-widgets>=0.2.1',
-    'seamm-util>=0.2.1',
-]
+with open('requirements_install.txt') as fd:
+    requirements = fd.read()
 
 setup(
     name='read_structure_step',
@@ -34,6 +30,7 @@ setup(
     author_email='meliseo@vt.edu',
     description=short_description[1],
     long_description=readme + '\n\n' + history,
+    long_description_content_type='text/x-rst',
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     license="BSD-3-Clause",
@@ -77,8 +74,8 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
     entry_points={
         'org.molssi.seamm': [
