@@ -4,7 +4,6 @@ Implementation of the reader for XYZ files using OpenBabel
 
 import os
 import seamm
-import seamm_util
 from read_structure_step.errors import MopError
 from read_structure_step.formats.registries import register_reader
 from ..which import which
@@ -69,7 +68,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.mop')
-def load_mop(file_name):
+def load_mop(file_name, system):
 
     with open(file_name, "r") as f:
         input_file = f.read()
@@ -95,9 +94,9 @@ def load_mop(file_name):
 
         mol = result['stdout']
 
-        structure = seamm_util.molfile.to_seamm(mol, extras["structure"])
-
-        return structure
+        # need to handle extras! extras["structure"]
+        system.from_molfile_text(mol)
+        return
 
     except MopError:
 
@@ -162,6 +161,5 @@ def load_mop(file_name):
 
         mol = result['stdout']
 
-        structure = seamm_util.molfile.to_seamm(mol, extras["structure"])
-
-        return structure
+        # need to handle extras! extras["structure"]
+        system.from_molfile_text(mol)

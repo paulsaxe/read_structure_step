@@ -7,6 +7,42 @@ import pytest  # noqa: F401
 import read_structure_step  # noqa: F401
 from . import build_filenames
 
+from molsystem.systems import Systems
+
+systems = Systems()
+system = systems.create_system('seamm', temporary=True)
+bond_string = """\
+    i   j  bondorder
+1   1   2          1
+2   1   5          1
+3   1   7          1
+4   2   3          2
+5   3   4          1
+6   3   6          1
+7   4   5          2
+8   5   8          1
+9   6   9          1
+10  6  10          1"""
+xyz_bond_string = """\
+    i   j  bondorder
+3   1   2          1
+2   1   5          1
+1   1   7          1
+4   2   3          2
+5   3   4          1
+6   3   6          1
+7   4   5          2
+8   5   8          1
+10  6   9          1
+9   6  10          1"""
+acetonitrile_bonds = """\
+   i  j  bondorder
+1  1  2          1
+2  1  6          3
+4  2  3          1
+5  2  4          1
+3  2  5          1"""
+
 
 @pytest.mark.parametrize(
     "structure",
@@ -15,45 +51,21 @@ from . import build_filenames
 def test_format(structure):
 
     file_name = build_filenames.build_data_filename(structure)
-    parsed_file = read_structure_step.read(file_name)
+    read_structure_step.read(file_name, system)
 
-    assert len(parsed_file["atoms"]["elements"]) == 10
+    assert system.n_atoms() == 10
     assert all(
         atom in ["N", "N", "N", "N", "C", "C", "H", "H", "H", "H"]
-        for atom in parsed_file["atoms"]["elements"]
+        for atom in system.atoms.symbols()
     )
-    assert len(parsed_file["atoms"]["coordinates"]) == 10
-    assert all(
-        len(point) == 3 for point in parsed_file["atoms"]["coordinates"]
-    )
-    assert len(parsed_file["bonds"]) == 10
-    assert any(
-        set(bond) == set((2, 1, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((5, 1, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((7, 1, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((2, 3, 'double')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((3, 4, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((3, 6, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((5, 8, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((6, 9, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((6, 10, 'single')) for bond in parsed_file["bonds"]
-    )
+    coordinates = system.atoms.coordinates()
+    assert len(coordinates) == 10
+    assert all(len(point) == 3 for point in coordinates)
+    assert system.bonds.n_bonds() == 10
+    if 'xyz' in structure:
+        assert str(system.bonds) == xyz_bond_string
+    else:
+        assert str(system.bonds) == bond_string
 
 
 @pytest.mark.skipif(
@@ -63,30 +75,16 @@ def test_format(structure):
 def test_mopac():
 
     file_name = build_filenames.build_data_filename('acetonitrile.mop')
-    parsed_file = read_structure_step.read(file_name)
+    read_structure_step.read(file_name, system)
 
-    assert len(parsed_file["atoms"]["elements"]) == 6
+    assert system.n_atoms() == 6
     assert all(
-        atom in ["H", "H", "H", "C", "C", "N"]
-        for atom in parsed_file["atoms"]["elements"]
+        atom in ["H", "H", "H", "C", "C", "N"] for atom in
+        system.atoms.symbols()
     )
-    assert len(parsed_file["atoms"]["coordinates"]) == 6
-    assert all(
-        len(point) == 3 for point in parsed_file["atoms"]["coordinates"]
-    )
-    assert len(parsed_file["bonds"]) == 5
-    assert any(
-        set(bond) == set((2, 1, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((6, 1, 'triple')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((5, 2, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((2, 3, 'single')) for bond in parsed_file["bonds"]
-    )
-    assert any(
-        set(bond) == set((2, 4, 'single')) for bond in parsed_file["bonds"]
-    )
+    coordinates = system.atoms.coordinates()
+    assert len(coordinates) == 6
+    assert all(len(point) == 3 for point in coordinates)
+    assert system.bonds.n_bonds() == 5
+    print(system.bonds)
+    assert str(system.bonds) == acetonitrile_bonds

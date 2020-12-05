@@ -3,7 +3,6 @@ Implementation of the reader for PDB files using OpenBabel
 """
 
 import seamm
-import seamm_util
 from read_structure_step.errors import PDBError
 from read_structure_step.formats.registries import register_reader
 from ..which import which
@@ -12,7 +11,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.pdb')
-def load_pdb(file_name):
+def load_pdb(file_name, system):
     obabel_exe = which('obabel')
     local = seamm.ExecLocal()
 
@@ -25,6 +24,4 @@ def load_pdb(file_name):
 
     mol = result['stdout']
 
-    structure = seamm_util.molfile.to_seamm(mol)
-
-    return structure
+    system.from_molfile_text(mol)

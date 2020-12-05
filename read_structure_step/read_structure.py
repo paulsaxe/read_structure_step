@@ -49,8 +49,11 @@ class ReadStructure(seamm.Node):
         #     logger.setLevel(self.options.read_structure_step_log_level)
 
         super().__init__(
-            flowchart=flowchart, title='Read Structure', extension=extension
-        )
+            flowchart=flowchart,
+            title=title,
+            extension=extension,
+            logger=logger
+        )  # yapf: disable
 
         self.parameters = read_structure_step.ReadStructureParameters()
 
@@ -111,35 +114,8 @@ class ReadStructure(seamm.Node):
                 )
             )
 
-        # Analyze the results
-        structure = read(P['file'])
-
-        seamm.data.structure = structure
-
-        self.analyze()
+        # Read the file into the system
+        system = self.get_variable('_system')
+        read(P['file'], system)
 
         return next_node
-
-    def analyze(self, indent='', **kwargs):
-        """Do any analysis of the output from this step.
-
-        Also print important results to the local step.out file using
-        'printer'.
-
-        Parameters:
-            indent: An extra indentation for the output
-
-            kwargs: Other arguments.
-
-        Returns
-            None
-        """
-        printer.normal(
-            __(
-                'This is a placeholder for the results from the '
-                'Read Structure step',
-                indent=4 * ' ',
-                wrap=True,
-                dedent=False
-            )
-        )
