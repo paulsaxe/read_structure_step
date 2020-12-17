@@ -8,13 +8,14 @@ Installation
 Stable release
 --------------
 
-To install the Read Structure Step, run this command in your terminal:
+To install the Read Structure plug-in, run this command in your terminal:
 
 .. code-block:: console
 
     $ pip install read_structure_step
 
-This is the preferred method to install Read Structure Step, as it will always install the most recent stable release. 
+This is the preferred method to install Read Structure
+plug-in, as it will always install the most recent stable release. 
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
@@ -26,7 +27,8 @@ you through the process.
 From sources
 ------------
 
-The sources for Read Structure Step can be downloaded from the `Github repo`_.
+The sources for the Read Structure plug-in can be downloaded
+from the `Github repo`_.
 
 You can either clone the public repository:
 

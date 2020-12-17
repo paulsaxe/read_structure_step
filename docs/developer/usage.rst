@@ -2,6 +2,6 @@
 Usage
 =====
 
-To use the Read Structure Step in a project::
+To use the Read Structure plug-in in a project::
 
     import read_structure_step
