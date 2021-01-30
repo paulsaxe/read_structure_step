@@ -11,7 +11,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.sdf')
-def load_sdf(file_name, system):
+def load_sdf(file_name, configuration):
     obabel_exe = which('obabel')
     local = seamm.ExecLocal()
 
@@ -24,4 +24,4 @@ def load_sdf(file_name, system):
 
     mol = result['stdout']
 
-    system.from_molfile_text(mol)
+    configuration.from_molfile_text(mol)

@@ -11,7 +11,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.xyz')
-def load_xyz(file_name, system):
+def load_xyz(file_name, configuration):
 
     obabel_exe = which('obabel')
     local = seamm.ExecLocal()
@@ -25,4 +25,4 @@ def load_xyz(file_name, system):
 
     mol = result['stdout']
 
-    system.from_molfile_text(mol)
+    configuration.from_molfile_text(mol)
