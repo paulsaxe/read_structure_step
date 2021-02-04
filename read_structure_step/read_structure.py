@@ -115,7 +115,8 @@ class ReadStructure(seamm.Node):
             )
 
         # Read the file into the system
-        system = self.get_variable('_system')
-        read(P['file'], system)
+        system_db = self.get_variable('_system_db')
+        configuration = system_db.system.configuration
+        read(P['file'], configuration)
 
         return next_node

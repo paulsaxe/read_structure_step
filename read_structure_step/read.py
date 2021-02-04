@@ -7,7 +7,7 @@ from . import formats
 import os
 
 
-def read(file_name, system, extension=None):
+def read(file_name, configuration, extension=None):
     """
     Calls the appropriate functions to parse the requested file.
 
@@ -16,8 +16,8 @@ def read(file_name, system, extension=None):
     file_name : str
         Name of the file
 
-    system : System
-        The SEAMM system to read into
+    configuration : Configuration
+        The SEAMM configuration to read into
 
     extension : str, optional, default: None
 
@@ -62,4 +62,4 @@ def read(file_name, system, extension=None):
 
     reader = formats.registries.REGISTERED_READERS[extension]
 
-    reader(file_name, system)
+    reader(file_name, configuration)

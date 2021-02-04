@@ -2,8 +2,12 @@
 Read Structure Step
 ===================
 
-.. image:: https://img.shields.io/travis/molssi-seamm/read_structure_step.svg
-   :target: https://travis-ci.org/molssi-seamm/read_structure_step
+.. image:: https://img.shields.io/github/issues-pr-raw/molssi-seamm/read_structure_step
+   :target: https://github.com/molssi-seamm/read_structure_step/pulls
+   :alt: GitHub pull requests
+
+.. image:: https://github.com/molssi-seamm/read_structure_step/workflows/CI/badge.svg
+   :target: https://github.com/molssi-seamm/read_structure_step/actions
    :alt: Build Status
 
 .. image:: https://codecov.io/gh/molssi-seamm/read_structure_step/branch/master/graph/badge.svg
@@ -14,8 +18,8 @@ Read Structure Step
    :target: https://lgtm.com/projects/g/molssi-seamm/read_structure_step/context:python
    :alt: Code Quality
 
-.. image:: https://readthedocs.org/projects/read_structure-step/badge/?version=latest
-   :target: https://read_structure-step.readthedocs.io/en/latest/?badge=latest
+.. image:: https://github.com/molssi-seamm/read_structure_step/workflows/Documentation/badge.svg
+   :target: https://molssi-seamm.github.io/read_structure_step/index.html
    :alt: Documentation Status
 
 .. image:: https://pyup.io/repos/github/molssi-seamm/read_structure_step/shield.svg
@@ -42,7 +46,7 @@ Features
 - Easily extensible to new formats.
 - Current support for PDB, Mol2 and XYZ files. 
 - Free software: BSD-3-Clause
-- Documentation: https://read-structure-step.readthedocs.io.
+- Documentation: https://molssi-seamm.github.io/read_structure_step/index.html
 
 Example
 -------

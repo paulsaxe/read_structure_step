@@ -68,7 +68,7 @@ obabel_error_identifiers = ['0 molecules converted']
 
 
 @register_reader('.mop')
-def load_mop(file_name, system):
+def load_mop(file_name, configuration):
 
     with open(file_name, "r") as f:
         input_file = f.read()
@@ -95,7 +95,7 @@ def load_mop(file_name, system):
         mol = result['stdout']
 
         # need to handle extras! extras["structure"]
-        system.from_molfile_text(mol)
+        configuration.from_molfile_text(mol)
         return
 
     except MopError:
@@ -162,4 +162,4 @@ def load_mop(file_name, system):
         mol = result['stdout']
 
         # need to handle extras! extras["structure"]
-        system.from_molfile_text(mol)
+        configuration.from_molfile_text(mol)
