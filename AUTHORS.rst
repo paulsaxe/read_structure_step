@@ -1,13 +1,6 @@
-=======
-Credits
-=======
-
-Development Lead
+Development Team
 ----------------
 
-* Eliseo Marin-Rimoldi <meliseo@vt.edu>
-
-Contributors
-------------
-
-None yet. Why not be the first?
+* Eliseo Marin-Rimoldi <meliseo@vt.edu> (Lead)
+* Paul Saxe <psaxe@molssi.org>
+* Why don't you join the team? Become a contributor!
