@@ -16,6 +16,7 @@ from .read import read  # noqa: F401
 
 # Handle versioneer
 from ._version import get_versions
+
 __author__ = """Eliseo Marin-R-Rimoldi"""
 __email__ = 'meliseo@vt.edu'
 versions = get_versions()
