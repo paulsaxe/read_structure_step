@@ -18,9 +18,9 @@ bond_string = """\
 @pytest.fixture(scope="module")
 def configuration():
     """Create a system db, system and configuration."""
-    db = SystemDB(filename='file:seamm_db?mode=memory&cache=shared')
-    system = db.create_system(name='default')
-    configuration = system.create_configuration(name='default')
+    db = SystemDB(filename="file:seamm_db?mode=memory&cache=shared")
+    system = db.create_system(name="default")
+    configuration = system.create_configuration(name="default")
 
     yield configuration
 
@@ -28,7 +28,7 @@ def configuration():
     try:
         del db
     except:  # noqa: E722
-        print('Caught error deleting the database')
+        print("Caught error deleting the database")
 
 
 @pytest.mark.parametrize("file_name", ["spc.xyz", "spc"])

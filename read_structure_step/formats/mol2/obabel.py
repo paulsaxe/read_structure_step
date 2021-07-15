@@ -7,22 +7,20 @@ from read_structure_step.errors import Mol2Error
 from read_structure_step.formats.registries import register_reader
 from ..which import which
 
-obabel_error_identifiers = ['0 molecules converted']
+obabel_error_identifiers = ["0 molecules converted"]
 
 
-@register_reader('.mol2')
+@register_reader(".mol2")
 def load_mol2(file_name, configuration):
-    obabel_exe = which('obabel')
+    obabel_exe = which("obabel")
     local = seamm.ExecLocal()
 
     result = local.run(
-        cmd=[obabel_exe, '-f 1', '-l 1', '-imol2', file_name, '-omol', '-x3']
+        cmd=[obabel_exe, "-f 1", "-l 1", "-imol2", file_name, "-omol", "-x3"]
     )
     for each_error in obabel_error_identifiers:
-        if each_error in result['stderr']:
-            raise Mol2Error(
-                'OpenBabel: Could not read input file. %s' % result
-            )
+        if each_error in result["stderr"]:
+            raise Mol2Error("OpenBabel: Could not read input file. %s" % result)
 
-    mol = result['stdout']
+    mol = result["stdout"]
     configuration.from_molfile_text(mol)

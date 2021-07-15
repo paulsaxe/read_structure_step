@@ -7,7 +7,7 @@ mopac_error_identifiers = []
 
 def find_mopac():
     try:
-        mopac_exe = '/opt/mopac/MOPAC2016.exe'
+        mopac_exe = "/opt/mopac/MOPAC2016.exe"
 
         if os.path.isfile(mopac_exe) is False:
             raise FileNotFoundError(
@@ -18,8 +18,8 @@ def find_mopac():
     except FileNotFoundError:
         try:
 
-            mopac_path = os.path.split(os.environ['mopac'])[0]
-            mopac_exe = mopac_path + 'MOPAC2016.exe'
+            mopac_path = os.path.split(os.environ["mopac"])[0]
+            mopac_exe = mopac_path + "MOPAC2016.exe"
 
             if os.path.isfile(mopac_exe) is False:
                 raise FileNotFoundError(
@@ -29,7 +29,7 @@ def find_mopac():
 
         except (KeyError, FileNotFoundError):
             try:
-                mopac_exe = Path(os.environ['MOPAC_LICENSE']) / 'MOPAC2016.exe'
+                mopac_exe = Path(os.environ["MOPAC_LICENSE"]) / "MOPAC2016.exe"
                 mopac_exe = str(mopac_exe)
 
                 if os.path.isfile(mopac_exe) is False:

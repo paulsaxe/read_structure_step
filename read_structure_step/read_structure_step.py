@@ -13,9 +13,9 @@ import read_structure_step
 
 class ReadStructureStep(object):
     my_description = {
-        'description': ('An interface for Read Structure'),
-        'group': 'Simulations',
-        'name': 'Read Structure'
+        "description": ("An interface for Read Structure"),
+        "group": "Simulations",
+        "name": "Read Structure",
     }
     """The description needs three fields:
 
@@ -39,16 +39,13 @@ class ReadStructureStep(object):
         pass
 
     def description(self):
-        """Return a description of what this extension does
-        """
+        """Return a description of what this extension does"""
         return ReadStructureStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):
-        """Create and return the new node object.
-        """
+        """Create and return the new node object."""
         return read_structure_step.ReadStructure(flowchart=flowchart, **kwargs)
 
     def create_tk_node(self, canvas=None, **kwargs):
-        """Create and return the graphical Tk node object.
-        """
+        """Create and return the graphical Tk node object."""
         return read_structure_step.TkReadStructure(canvas=canvas, **kwargs)

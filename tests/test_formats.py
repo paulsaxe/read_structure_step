@@ -45,9 +45,9 @@ acetonitrile_bonds = """\
 @pytest.fixture(scope="module")
 def configuration():
     """Create a system db, system and configuration."""
-    db = SystemDB(filename='file:seamm_db?mode=memory&cache=shared')
-    system = db.create_system(name='default')
-    configuration = system.create_configuration(name='default')
+    db = SystemDB(filename="file:seamm_db?mode=memory&cache=shared")
+    system = db.create_system(name="default")
+    configuration = system.create_configuration(name="default")
 
     yield configuration
 
@@ -55,12 +55,11 @@ def configuration():
     try:
         del db
     except:  # noqa: E722
-        print('Caught error deleting the database')
+        print("Caught error deleting the database")
 
 
 @pytest.mark.parametrize(
-    "structure",
-    ["3TR_model.mol2", "3TR_model.xyz", "3TR_model.pdb", "3TR_model.sdf"]
+    "structure", ["3TR_model.mol2", "3TR_model.xyz", "3TR_model.pdb", "3TR_model.sdf"]
 )
 def test_format(configuration, structure):
 
@@ -76,7 +75,7 @@ def test_format(configuration, structure):
     assert len(coordinates) == 10
     assert all(len(point) == 3 for point in coordinates)
     assert configuration.bonds.n_bonds == 10
-    if 'xyz' in structure:
+    if "xyz" in structure:
         if str(configuration.bonds) != xyz_bond_string:
             print(configuration.bonds)
         assert str(configuration.bonds) == xyz_bond_string
@@ -88,17 +87,16 @@ def test_format(configuration, structure):
 
 @pytest.mark.skipif(
     read_structure_step.formats.mop.find_mopac.find_mopac() is None,
-    reason="MOPAC could not be found"
+    reason="MOPAC could not be found",
 )
 def test_mopac(configuration):
 
-    file_name = build_filenames.build_data_filename('acetonitrile.mop')
+    file_name = build_filenames.build_data_filename("acetonitrile.mop")
     read_structure_step.read(file_name, configuration)
 
     assert configuration.n_atoms == 6
     assert all(
-        atom in ["H", "H", "H", "C", "C", "N"]
-        for atom in configuration.atoms.symbols
+        atom in ["H", "H", "H", "C", "C", "N"] for atom in configuration.atoms.symbols
     )
     coordinates = configuration.atoms.coordinates
     assert len(coordinates) == 6

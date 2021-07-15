@@ -2,29 +2,22 @@
 
 """The graphical part of a Read Structure step"""
 
-import seamm
-from seamm_util import ureg, Q_, units_class  # noqa: F401
-import seamm_widgets as sw
-import Pmw
+from pathlib import PurePath
 import pprint  # noqa: F401
 import tkinter as tk
 import tkinter.ttk as ttk
 
+from .formats.registries import get_format_metadata
+import seamm
+from seamm_util import ureg, Q_, units_class  # noqa: F401
+import seamm_widgets as sw
+
 
 class TkReadStructure(seamm.TkNode):
-    """The graphical part of a Read Structure step in a flowchart.
-
-    """
+    """The graphical part of a Read Structure step in a flowchart."""
 
     def __init__(
-        self,
-        tk_flowchart=None,
-        node=None,
-        canvas=None,
-        x=None,
-        y=None,
-        w=200,
-        h=50
+        self, tk_flowchart=None, node=None, canvas=None, x=None, y=None, w=200, h=50
     ):
         """Initialize a graphical node
 
@@ -41,42 +34,58 @@ class TkReadStructure(seamm.TkNode):
         self.dialog = None
 
         super().__init__(
-            tk_flowchart=tk_flowchart,
-            node=node,
-            canvas=canvas,
-            x=x,
-            y=y,
-            w=w,
-            h=h
+            tk_flowchart=tk_flowchart, node=node, canvas=canvas, x=x, y=y, w=w, h=h
         )
 
     def create_dialog(self):
-        """Create the dialog!"""
-        self.dialog = Pmw.Dialog(
-            self.toplevel,
-            buttons=('OK', 'Help', 'Cancel'),
-            defaultbutton='OK',
-            master=self.toplevel,
-            title='Edit Read Structure step',
-            command=self.handle_dialog
+        """Create a dialog for editing the control parameters"""
+        frame = super().create_dialog("Read Structure Step")
+
+        # Create two frames, one for the filename, etc and one for where to put the
+        # structure.
+        frame1 = self["filename frame"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="File to Read",
+            labelanchor="n",
+            padding=10,
         )
-        self.dialog.withdraw()
+        frame2 = self["handling frame"] = ttk.LabelFrame(
+            frame,
+            borderwidth=4,
+            relief="sunken",
+            text="How to handle the structure(s)",
+            labelanchor="n",
+            padding=10,
+        )
 
-        # The information about widgets is held in self['xxxx'], i.e. this
-        # class is in part a dictionary of widgets. This makes accessing
-        # the widgets easier and allows loops, etc.
-
-        # Create a frame to hold everything. This is always called 'frame'.
-        self['frame'] = ttk.Frame(self.dialog.interior())
-        self['frame'].pack(expand=tk.YES, fill=tk.BOTH)
-        # Shortcut for parameters
+        # Create the widgets
         P = self.node.parameters
+        for key in ("file", "file type", "indices", "add hydrogens"):
+            self[key] = P[key].widget(frame1)
+        for key in (
+            "structure handling",
+            "subsequent structure handling",
+            "system name",
+            "configuration name",
+        ):
+            self[key] = P[key].widget(frame2)
 
-        # The create the widgets
-        for key in P:
-            self[key] = P[key].widget(self['frame'])
+        # Set bindings
+        for name in ("file", "file type"):
+            combobox = self[name].combobox
+            combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
+            combobox.bind("<Return>", self.reset_dialog)
+            combobox.bind("<FocusOut>", self.reset_dialog)
 
-        # and lay them out
+        # Put in the widgets that are always present
+        frame1.grid(row=0, sticky=tk.EW)
+        frame2.grid(row=1, sticky=tk.EW)
+
+        frame.columnconfigure(0, weight=1)
+
+        # and lay the widgets out
         self.reset_dialog()
 
     def reset_dialog(self, widget=None):
@@ -87,74 +96,94 @@ class TkReadStructure(seamm.TkNode):
         is controlled by values of some of the control parameters.
         """
 
+        ##########################
+        # Handle the first frame #
+        ##########################
+
         # Remove any widgets previously packed
-        frame = self['frame']
-        for slave in frame.grid_slaves():
+        frame1 = self["filename frame"]
+        for slave in frame1.grid_slaves():
             slave.grid_forget()
 
-        # Shortcut for parameters
-        P = self.node.parameters
+        # What type of file?
+        extension = ""
+        filename = self["file"].get().strip()
+        file_type = self["file type"].get()
 
-        # keep track of the row in a variable, so that the layout is flexible
-        # if e.g. rows are skipped to control such as 'method' here
+        if self.is_expr(filename) or self.is_expr(file_type):
+            extension = "all"
+        else:
+            if file_type != "from extension":
+                extension = file_type.split()[0]
+            else:
+                if filename != "":
+                    path = PurePath(filename)
+                    extension = path.suffix
+                    if extension == ".gz":
+                        extension = path.stem.suffix
+
+        # Get the metadata for the format
+        metadata = get_format_metadata(extension)
+
+        # and put the correct ones back in.
         row = 0
         widgets = []
-        for key in P:
-            self[key].grid(row=row, column=0, sticky=tk.EW)
-            widgets.append(self[key])
+        for item in ("file", "file type"):
+            self[item].grid(row=row, column=0, columnspan=2, sticky=tk.EW)
+            widgets.append(self[item])
             row += 1
+        sw.align_labels(widgets)
 
-        # Align the labels
+        items = []
+        if extension == "all" or not metadata["single_structure"]:
+            items.append("indices")
+        if extension == "all" or metadata["add_hydrogens"]:
+            items.append("add hydrogens")
+        if len(items) > 0:
+            widgets = []
+            for item in items:
+                self[item].grid(row=row, column=1, sticky=tk.EW)
+                widgets.append(self[item])
+                row += 1
+            sw.align_labels(widgets)
+
+        # Set the widths and expansion
+        frame1.columnconfigure(0, minsize=50)
+        frame1.columnconfigure(1, weight=1)
+
+        ###############################
+        # Now handle the second frame #
+        ###############################
+
+        # Remove any widgets previously packed
+        frame2 = self["handling frame"]
+        for slave in frame1.grid_slaves():
+            slave.grid_forget()
+
+        # Grid the needed widgets
+        if extension == "all" or not metadata["single_structure"]:
+            items = (
+                "structure handling",
+                "subsequent structure handling",
+                "system name",
+                "configuration name",
+            )
+        else:
+            items = ("structure handling", "system name", "configuration name")
+
+        widgets = []
+        row = 0
+        for item in items:
+            self[item].grid(row=row, sticky=tk.EW)
+            widgets.append(self[item])
+            row += 1
+        frame2.columnconfigure(0, weight=1)
         sw.align_labels(widgets)
 
     def right_click(self, event):
-        """Probably need to add our dialog...
-        """
+        """Probably need to add our dialog..."""
 
         super().right_click(event)
         self.popup_menu.add_command(label="Edit..", command=self.edit)
 
         self.popup_menu.tk_popup(event.x_root, event.y_root, 0)
-
-    def edit(self):
-        """Present a dialog for editing the Read Structure input
-        """
-        if self.dialog is None:
-            self.create_dialog()
-
-        self.dialog.activate(geometry='centerscreenfirst')
-
-    def handle_dialog(self, result):
-        """Handle the closing of the edit dialog
-
-        What to do depends on the button used to close the dialog. If
-        the user closes it by clicking the 'x' of the dialog window,
-        None is returned, which we take as equivalent to cancel.
-        """
-        if result is None or result == 'Cancel':
-            self.dialog.deactivate(result)
-            return
-
-        if result == 'Help':
-            # display help!!!
-            return
-
-        if result != "OK":
-            self.dialog.deactivate(result)
-            raise RuntimeError(
-                "Don't recognize dialog result '{}'".format(result)
-            )
-
-        self.dialog.deactivate(result)
-        # Shortcut for parameters
-        P = self.node.parameters
-
-        # Get the values for all the widgets. This may be overkill, but
-        # it is easy! You can sort out what it all means later, or
-        # be a bit more selective.
-        for key in P:
-            P[key].set_from_widget()
-
-    def handle_help(self):
-        """Not implemented yet ... you'll need to fill this out!"""
-        print('Help not implemented yet for Read Structure!')

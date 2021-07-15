@@ -3,7 +3,7 @@ from read_structure_step.formats.registries import register_format_checker
 import re
 
 
-@register_format_checker('.xyz')
+@register_format_checker(".xyz")
 def check_format(file_name):
 
     element_coords_regex = r"""^\s*(A[cglmrstu]|B[aehikr]?|C[adeflmnorsu] \
@@ -22,7 +22,5 @@ def check_format(file_name):
             if line_nbr == 0 and re.search(r"^\s*[0-9]+\s*$", line) is None:
                 return False
 
-            if line_nbr == 2 and re.search(
-                element_coords_regex, line
-            ) is not None:
+            if line_nbr == 2 and re.search(element_coords_regex, line) is not None:
                 return True
