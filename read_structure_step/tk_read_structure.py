@@ -157,7 +157,7 @@ class TkReadStructure(seamm.TkNode):
 
         # Remove any widgets previously packed
         frame2 = self["handling frame"]
-        for slave in frame1.grid_slaves():
+        for slave in frame2.grid_slaves():
             slave.grid_forget()
 
         # Grid the needed widgets
