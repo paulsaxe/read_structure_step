@@ -63,7 +63,7 @@ obabel_error_identifiers = ["0 molecules converted"]
 
 
 @register_reader(".mop")
-def load_mop(file_name, configuration):
+def load_mop(file_name, configuration, **kwargs):
 
     with open(file_name, "r") as f:
         input_file = f.read()

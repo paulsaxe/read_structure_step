@@ -18,6 +18,9 @@ def read(
     subsequent_as_configurations=False,
     system_name=None,
     configuration_name=None,
+    printer=None,
+    references=None,
+    bibliography=None,
 ):
     """
     Calls the appropriate functions to parse the requested file.
@@ -57,6 +60,15 @@ def read(
     configuration_name : str = None
         The name for configurations. Can be directives like "SMILES" or
         "Canonical SMILES". If None, no name is given.
+
+    printer : Logger or Printer
+        A function that prints to the appropriate place, used for progress.
+
+    references : ReferenceHandler = None
+        The reference handler object or None
+
+    bibliography : dict
+        The bibliography as a dictionary.
 
     Returns
     -------
@@ -111,6 +123,9 @@ def read(
         subsequent_as_configurations=subsequent_as_configurations,
         system_name=system_name,
         configuration_name=configuration_name,
+        printer=printer,
+        references=references,
+        bibliography=bibliography,
     )
 
     return configurations

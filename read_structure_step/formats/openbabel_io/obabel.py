@@ -2,10 +2,16 @@
 """
 
 from pathlib import Path
+import shutil
+import string
+import subprocess
 
 from openbabel import openbabel
 
 from read_structure_step.formats.registries import register_reader  # noqa: F401
+
+if "OpenBabel_version" not in globals():
+    OpenBabel_version = None
 
 # Get the list of file formats from Open Babel
 obConversion = openbabel.OBConversion()
@@ -25,6 +31,9 @@ def load_file(
     subsequent_as_configurations=False,
     system_name="Canonical SMILES",
     configuration_name="sequential",
+    printer=None,
+    references=None,
+    bibliography=None,
     **kwargs,
 ):
     """Use Open Babel for reading any of the formats it supports.
@@ -69,11 +78,22 @@ def load_file(
         The name for configurations. Can be directives like "SMILES" or
         "Canonical SMILES". If None, no name is given.
 
+    printer : Logger or Printer
+        A function that prints to the appropriate place, used for progress.
+
+    references : ReferenceHandler = None
+        The reference handler object or None
+
+    bibliography : dict
+        The bibliography as a dictionary.
+
     Returns
     -------
     [Configuration]
         The list of configurations created.
     """
+    global OpenBabel_version
+
     if isinstance(path, str):
         path = Path(path)
 
@@ -115,5 +135,63 @@ def load_file(
             configuration.name = "1"
         else:
             configuration.name = configuration_name
+
+    if references:
+        # Add the citations for Open Babel
+        references.cite(
+            raw=bibliography["openbabel"],
+            alias="openbabel_jcinf",
+            module="read_structure_step",
+            level=1,
+            note="The principle Open Babel citation.",
+        )
+
+        # See if we can get the version of obabel
+        if OpenBabel_version is None:
+            path = shutil.which("obabel")
+            if path is not None:
+                path = Path(path).expanduser().resolve()
+                try:
+                    result = subprocess.run(
+                        [str(path), "--version"],
+                        stdin=subprocess.DEVNULL,
+                        capture_output=True,
+                        text=True,
+                    )
+                except Exception:
+                    OpenBabel_version = "unknown"
+                else:
+                    OpenBabel_version = "unknown"
+                    lines = result.stdout.splitlines()
+                    for line in lines:
+                        line = line.strip()
+                        tmp = line.split()
+                        if len(tmp) == 9 and tmp[0] == "Open":
+                            OpenBabel_version = {
+                                "version": tmp[2],
+                                "month": tmp[4],
+                                "year": tmp[6],
+                            }
+                        break
+
+        if isinstance(OpenBabel_version, dict):
+            try:
+                template = string.Template(bibliography["obabel"])
+
+                citation = template.substitute(
+                    month=OpenBabel_version["month"],
+                    version=OpenBabel_version["version"],
+                    year=OpenBabel_version["year"],
+                )
+
+                references.cite(
+                    raw=citation,
+                    alias="obabel-exe",
+                    module="read_structure_step",
+                    level=1,
+                    note="The principle citation for the Open Babel executables.",
+                )
+            except Exception:
+                pass
 
     return [configuration]

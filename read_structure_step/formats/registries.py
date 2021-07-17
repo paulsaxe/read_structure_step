@@ -142,3 +142,22 @@ def last_resort_reader(formats, fn):
 
         if extension not in REGISTERED_READERS:
             REGISTERED_READERS[extension] = {"function": fn, "description": description}
+
+
+def last_resort_checker(format, fn):
+    """Sets the reader for a list of formats if there is no reader registered.
+
+    Parameters
+    ----------
+    format : str
+        File extension indicating format, e.g. '.pdb'
+    fn : function
+        The function that checks the file
+    """
+    tmp = format.split()
+    extension = tmp[0]
+    if extension[0] != ".":
+        extension = "." + extension
+
+    if extension not in REGISTERED_FORMAT_CHECKERS:
+        REGISTERED_FORMAT_CHECKERS[extension] = fn

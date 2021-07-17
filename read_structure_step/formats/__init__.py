@@ -4,6 +4,7 @@ import sys
 import importlib
 
 from .registries import last_resort_reader
+from .openbabel_io.checkers import add_format_checkers
 from .openbabel_io.obabel import known_input_formats
 from .openbabel_io.obabel import load_file
 
@@ -26,3 +27,6 @@ del os, pkgutil, sys, importlib
 
 # Finally register the Open Babel reader as the last resort
 last_resort_reader(known_input_formats, load_file)
+
+# And the file format checkers
+add_format_checkers()

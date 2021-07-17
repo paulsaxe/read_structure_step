@@ -111,8 +111,8 @@ class ReadStructure(seamm.Node):
 
     def run(self):
         """Run a Read Structure step."""
-
         next_node = super().run(printer)
+
         # Get the values of the parameters, dereferencing any variables
         P = self.parameters.current_values_to_dict(
             context=seamm.flowchart_variables._data
@@ -135,7 +135,7 @@ class ReadStructure(seamm.Node):
             P["file type"] = extension
 
         # Print what we are doing
-        printer.important(self.description_text(P))
+        printer.important(__(self.description_text(P), indent=4 * " "))
 
         # Read the file into the system
         system_db = self.get_variable("_system_db")
@@ -156,6 +156,9 @@ class ReadStructure(seamm.Node):
             ),
             system_name=P["system name"],
             configuration_name=P["configuration name"],
+            printer=printer.important,
+            references=self.references,
+            bibliography=self._bibliography,
         )
 
         # Finish the output
