@@ -8,8 +8,6 @@ import subprocess
 
 from openbabel import openbabel
 
-from read_structure_step.formats.registries import register_reader  # noqa: F401
-
 if "OpenBabel_version" not in globals():
     OpenBabel_version = None
 
@@ -135,6 +133,140 @@ def load_file(
             configuration.name = "1"
         else:
             configuration.name = configuration_name
+
+    if references:
+        # Add the citations for Open Babel
+        references.cite(
+            raw=bibliography["openbabel"],
+            alias="openbabel_jcinf",
+            module="read_structure_step",
+            level=1,
+            note="The principle Open Babel citation.",
+        )
+
+        # See if we can get the version of obabel
+        if OpenBabel_version is None:
+            path = shutil.which("obabel")
+            if path is not None:
+                path = Path(path).expanduser().resolve()
+                try:
+                    result = subprocess.run(
+                        [str(path), "--version"],
+                        stdin=subprocess.DEVNULL,
+                        capture_output=True,
+                        text=True,
+                    )
+                except Exception:
+                    OpenBabel_version = "unknown"
+                else:
+                    OpenBabel_version = "unknown"
+                    lines = result.stdout.splitlines()
+                    for line in lines:
+                        line = line.strip()
+                        tmp = line.split()
+                        if len(tmp) == 9 and tmp[0] == "Open":
+                            OpenBabel_version = {
+                                "version": tmp[2],
+                                "month": tmp[4],
+                                "year": tmp[6],
+                            }
+                        break
+
+        if isinstance(OpenBabel_version, dict):
+            try:
+                template = string.Template(bibliography["obabel"])
+
+                citation = template.substitute(
+                    month=OpenBabel_version["month"],
+                    version=OpenBabel_version["version"],
+                    year=OpenBabel_version["year"],
+                )
+
+                references.cite(
+                    raw=citation,
+                    alias="obabel-exe",
+                    module="read_structure_step",
+                    level=1,
+                    note="The principle citation for the Open Babel executables.",
+                )
+            except Exception:
+                pass
+
+    return [configuration]
+
+
+def write_file(
+    path,
+    configuration,
+    extension=".sdf",
+    remove_hydrogens="no",
+    system_db=None,
+    system=None,
+    printer=None,
+    references=None,
+    bibliography=None,
+    **kwargs,
+):
+    """Use Open Babel for reading any of the formats it supports.
+
+    See https://en.wikipedia.org/wiki/Chemical_table_file for a description of the
+    format. This function is using Open Babel to handle the file, so trusts that Open
+    Babel knows what it is doing.
+
+    Parameters
+    ----------
+    file_name : str or Path
+        The path to the file, as either a string or Path.
+
+    configuration : molsystem.Configuration
+        The configuration to put the imported structure into.
+
+    extension : str, optional, default: None
+        The extension, including initial dot, defining the format.
+
+    remove_hydrogens : str = "no"
+        Whether to remove any hydrogen atoms before writing the file.
+
+    system_db : System_DB = None
+        The system database, used if multiple structures in the file.
+
+    system : System = None
+        The system to use if adding subsequent structures as configurations.
+
+    printer : Logger or Printer
+        A function that prints to the appropriate place, used for progress.
+
+    references : ReferenceHandler = None
+        The reference handler object or None
+
+    bibliography : dict
+        The bibliography as a dictionary.
+
+    Returns
+    -------
+    [Configuration]
+        The list of configurations created.
+    """
+    global OpenBabel_version
+
+    if isinstance(path, str):
+        path = Path(path)
+
+    path.expanduser().resolve()
+
+    obConversion = openbabel.OBConversion()
+    obConversion.SetInAndOutFormats("smi", extension.lstrip("."))
+
+    obMol = configuration.to_OBMol()
+
+    if remove_hydrogens == "nonpolar":
+        obMol.DeleteNonPolarHydrogens()
+    elif remove_hydrogens == "all":
+        obMol.DeleteHydrogens()
+
+    obMol.SetTitle(f"{system.name}/{configuration.name}")
+
+    obConversion.WriteFile(obMol, str(path))
 
     if references:
         # Add the citations for Open Babel
