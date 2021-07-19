@@ -59,11 +59,13 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     entry_points={
-        'org.molssi.seamm': [
-            'Read Structure = read_structure_step:ReadStructureStep',
+        "org.molssi.seamm": [
+            "Read Structure = read_structure_step:ReadStructureStep",
+            "Write Structure = read_structure_step:WriteStructureStep",
         ],
-        'org.molssi.seamm.tk': [
-            'Read Structure = read_structure_step:ReadStructureStep',
+        "org.molssi.seamm.tk": [
+            "Read Structure = read_structure_step:ReadStructureStep",
+            "Write Structure = read_structure_step:WriteStructureStep",
         ],
     }
 )
