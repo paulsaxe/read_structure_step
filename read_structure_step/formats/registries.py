@@ -20,6 +20,7 @@ FORMAT_METADATA : dict(str, dict(str, str))
 """
 
 REGISTERED_READERS = {}
+REGISTERED_WRITERS = {}
 REGISTERED_FORMAT_CHECKERS = {}
 FORMAT_METADATA = {}
 default_metadata = {
@@ -50,6 +51,31 @@ def register_reader(file_format):
     def decorator_function(fn):
 
         REGISTERED_READERS[extension] = {"function": fn, "description": description}
+
+        def wrapper_function(*args, **kwargs):
+            return fn(*args, **kwargs)
+
+        return wrapper_function
+
+    return decorator_function
+
+
+def register_writer(file_format):
+    """A decorator for registering structure file writers."""
+    tmp = file_format.split()
+    extension = tmp[0]
+    if extension[0] != ".":
+        extension = "." + extension
+    if len(tmp) == 1:
+        description = ""
+    else:
+        if tmp[1] == "--":
+            description = " ".join(tmp[2:])
+        else:
+            description = " ".join(tmp[1:])
+
+    def decorator_function(fn):
+        REGISTERED_WRITERS[extension] = {"function": fn, "description": description}
 
         def wrapper_function(*args, **kwargs):
             return fn(*args, **kwargs)
@@ -142,6 +168,33 @@ def last_resort_reader(formats, fn):
 
         if extension not in REGISTERED_READERS:
             REGISTERED_READERS[extension] = {"function": fn, "description": description}
+
+
+def last_resort_writer(formats, fn):
+    """Sets the writer for a list of formats if there is no writer registered.
+
+    Parameters
+    ----------
+    formats : (str)
+        An iterable list of formats handled by the function of last resort.
+    fn : function
+        The function of last resort.
+    """
+    for format in formats:
+        tmp = format.split()
+        extension = tmp[0]
+        if extension[0] != ".":
+            extension = "." + extension
+        if len(tmp) == 1:
+            description = ""
+        else:
+            if tmp[1] == "--":
+                description = " ".join(tmp[2:])
+            else:
+                description = " ".join(tmp[1:])
+
+        if extension not in REGISTERED_WRITERS:
+            REGISTERED_WRITERS[extension] = {"function": fn, "description": description}
 
 
 def last_resort_checker(format, fn):
