@@ -14,7 +14,7 @@ import read_structure_step
 class ReadStructureStep(object):
     my_description = {
         "description": ("An interface for Read Structure"),
-        "group": "Simulations",
+        "group": "Data",
         "name": "Read Structure",
     }
     """The description needs three fields:
