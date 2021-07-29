@@ -140,13 +140,23 @@ class WriteStructure(seamm.Node):
         system_db = self.get_variable("_system_db")
         system, configuration = self.get_system_configuration(P)
 
+        structures = P("structures")
+        if structures == "current configuration":
+            configurations = [configuration]
+        elif structures == "all configurations of current system":
+            for configuration in system.configurations():
+                configurations.append(configuration)
+        elif structures == "all systems":
+            configurations = []
+            for system in system_db.systems():
+                for configuration in system.configurations():
+                    configurations.append(configuration)
+
         write(
             filename,
-            configuration,
+            configurations,
             extension=extension,
             remove_hydrogens=P["remove hydrogens"],
-            system_db=system_db,
-            system=system,
             printer=printer.important,
             references=self.references,
             bibliography=self._bibliography,

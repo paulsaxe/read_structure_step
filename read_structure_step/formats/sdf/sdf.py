@@ -12,6 +12,7 @@ from openbabel import openbabel
 
 from ..registries import register_format_checker
 from ..registries import register_reader
+from ..registries import register_writer
 from ..registries import set_format_metadata
 
 if "OpenBabel_version" not in globals():
@@ -218,6 +219,174 @@ def load_sdf(
         rate = structure_no / (t1 - t0)
         printer(
             f"Read {structure_no} structures in {t1 - t0:.1f} seconds = {rate:.2f} "
+            "per second"
+        )
+
+    if references:
+        # Add the citations for Open Babel
+        references.cite(
+            raw=bibliography["openbabel"],
+            alias="openbabel_jcinf",
+            module="read_structure_step",
+            level=1,
+            note="The principle Open Babel citation.",
+        )
+
+        # See if we can get the version of obabel
+        if OpenBabel_version is None:
+            path = shutil.which("obabel")
+            if path is not None:
+                path = Path(path).expanduser().resolve()
+                try:
+                    result = subprocess.run(
+                        [str(path), "--version"],
+                        stdin=subprocess.DEVNULL,
+                        capture_output=True,
+                        text=True,
+                    )
+                except Exception:
+                    OpenBabel_version = "unknown"
+                else:
+                    OpenBabel_version = "unknown"
+                    lines = result.stdout.splitlines()
+                    for line in lines:
+                        line = line.strip()
+                        tmp = line.split()
+                        if len(tmp) == 9 and tmp[0] == "Open":
+                            OpenBabel_version = {
+                                "version": tmp[2],
+                                "month": tmp[4],
+                                "year": tmp[6],
+                            }
+                        break
+
+        if isinstance(OpenBabel_version, dict):
+            try:
+                template = string.Template(bibliography["obabel"])
+
+                citation = template.substitute(
+                    month=OpenBabel_version["month"],
+                    version=OpenBabel_version["version"],
+                    year=OpenBabel_version["year"],
+                )
+
+                references.cite(
+                    raw=citation,
+                    alias="obabel-exe",
+                    module="read_structure_step",
+                    level=1,
+                    note="The principle citation for the Open Babel executables.",
+                )
+            except Exception:
+                pass
+
+    return configurations
+
+
+@register_writer(".sd -- MDL structure-data file")
+@register_writer(".sdf -- MDL structure-data file")
+def write_sdf(
+    path,
+    configurations,
+    extension=None,
+    remove_hydrogens="no",
+    printer=None,
+    references=None,
+    bibliography=None,
+):
+    """Write an MDL structure-data (SDF) file.
+
+    See https://en.wikipedia.org/wiki/Chemical_table_file for a description of the
+    format. This function is using Open Babel to handle the file, so trusts that Open
+    Babel knows what it is doing.
+
+    Parameters
+    ----------
+    path : str
+        Name of the file
+
+    configurations : [Configuration]
+        The SEAMM configurations to write
+
+    extension : str, optional, default: None
+        The extension, including initial dot, defining the format.
+
+    remove_hydrogens : str = "no"
+        Whether to remove hydrogen atoms before writing the structure to file.
+
+    printer : Logger or Printer
+        A function that prints to the appropriate place, used for progress.
+
+    references : ReferenceHandler = None
+        The reference handler object or None
+
+    bibliography : dict
+        The bibliography as a dictionary.
+    """
+    global OpenBabel_version
+
+    if isinstance(path, str):
+        path = Path(path)
+
+    path.expanduser().resolve()
+
+    # Get the information for progress output, if requested.
+    if printer is not None:
+        n_structures = 0
+        with path.open() as fd:
+            for line in fd:
+                if line[0:4] == "$$$$":
+                    n_structures += 1
+        printer(f"The SDF file contains {n_structures} structures.")
+        last_percent = 0
+        t0 = time.time()
+        last_t = t0
+
+    obConversion = openbabel.OBConversion()
+    obConversion.SetInAndOutFormats("smi", "sdf")
+
+    structure_no = 1
+    for configuration in configurations:
+        obMol = configuration.to_OBMol()
+
+        system = configuration.system
+        title = f"{system.name}/{configuration.name}"
+        obMol.SetTitle(title)
+
+        if remove_hydrogens == "nonpolar":
+            obMol.DeleteNonPolarHydrogens()
+        elif remove_hydrogens == "all":
+            obMol.DeleteHydrogens()
+
+        if structure_no == 1:
+            ok = obConversion.WriteFile(obMol, str(path))
+        else:
+            ok = obConversion.Write(obMol)
+
+        if not ok:
+            raise RuntimeError("Error writing file")
+
+        structure_no += 1
+        if printer:
+            percent = int(100 * structure_no / n_structures)
+            if percent > last_percent:
+                t1 = time.time()
+                if t1 - last_t >= 60:
+                    t = int(t1 - t0)
+                    rate = structure_no / (t1 - t0)
+                    t_left = int((n_structures - structure_no) / rate)
+                    printer(
+                        f"\t{structure_no:6} ({percent}%) structures wrote in {t} "
+                        f"seconds. About {t_left} seconds remaining."
+                    )
+                    last_t = t1
+                    last_percent = percent
+
+    if printer:
+        t1 = time.time()
+        rate = structure_no / (t1 - t0)
+        printer(
+            f"Wrote {structure_no} structures in {t1 - t0:.1f} seconds = {rate:.2f} "
             "per second"
         )
 

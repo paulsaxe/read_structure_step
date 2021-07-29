@@ -8,11 +8,9 @@ import os
 
 def write(
     file_name,
-    configuration,
+    configurations,
     extension=None,
     remove_hydrogens="no",
-    system_db=None,
-    system=None,
     printer=None,
     references=None,
     bibliography=None,
@@ -25,20 +23,14 @@ def write(
     file_name : str
         Name of the file
 
-    configuration : Configuration
-        The SEAMM configuration to write into
+    configurations : [Configuration]
+        The SEAMM configuration(s) to write
 
     extension : str, optional, default: None
         The extension, including initial dot, defining the format.
 
     remove_hydrogens : str = "no"
         Whether to remove hydrogen atoms before writing the structure to file.
-
-    system_db : System_DB = None
-        The system database, used if multiple structures in the file.
-
-    system : System = None
-        The system to use if adding subsequent structures as configurations.
 
     printer : Logger or Printer
         A function that prints to the appropriate place, used for progress.
@@ -48,10 +40,6 @@ def write(
 
     bibliography : dict
         The bibliography as a dictionary.
-
-    Returns
-    -------
-    [Configuration]
         The list of configurations created.
     """
 
@@ -82,11 +70,9 @@ def write(
 
     writer(
         file_name,
-        configuration,
+        configurations,
         extension=extension,
         remove_hydrogens=remove_hydrogens,
-        system_db=system_db,
-        system=system,
         printer=printer,
         references=references,
         bibliography=bibliography,

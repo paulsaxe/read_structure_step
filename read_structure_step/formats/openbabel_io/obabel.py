@@ -197,11 +197,9 @@ def load_file(
 
 def write_file(
     path,
-    configuration,
+    configurations,
     extension=".sdf",
     remove_hydrogens="no",
-    system_db=None,
-    system=None,
     printer=None,
     references=None,
     bibliography=None,
@@ -218,20 +216,14 @@ def write_file(
     file_name : str or Path
         The path to the file, as either a string or Path.
 
-    configuration : molsystem.Configuration
-        The configuration to put the imported structure into.
+    configurations : [molsystem.Configuration]
+        The configurations to write -- should be one for this module
 
     extension : str, optional, default: None
         The extension, including initial dot, defining the format.
 
     remove_hydrogens : str = "no"
         Whether to remove any hydrogen atoms before writing the file.
-
-    system_db : System_DB = None
-        The system database, used if multiple structures in the file.
-
-    system : System = None
-        The system to use if adding subsequent structures as configurations.
 
     printer : Logger or Printer
         A function that prints to the appropriate place, used for progress.
@@ -257,7 +249,11 @@ def write_file(
     obConversion = openbabel.OBConversion()
     obConversion.SetInAndOutFormats("smi", extension.lstrip("."))
 
+    configuration = configurations[0]
+    system = configuration.system
     obMol = configuration.to_OBMol()
+    title = f"{system.name}/{configuration.name}"
+    obMol.SetTitle(title)
 
     if remove_hydrogens == "nonpolar":
         obMol.DeleteNonPolarHydrogens()
