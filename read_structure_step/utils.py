@@ -26,7 +26,7 @@ def guess_extension(file_name, use_file_name=False):
     if use_file_name is True:
         (root, ext) = os.path.splitext(file_name)
 
-        if ext == '':
+        if ext == "":
             return None
 
         return ext.lower()
@@ -35,8 +35,7 @@ def guess_extension(file_name, use_file_name=False):
 
     for extension in available_extensions:
 
-        extension_checker = formats.registries.REGISTERED_FORMAT_CHECKERS[
-            extension]
+        extension_checker = formats.registries.REGISTERED_FORMAT_CHECKERS[extension]
 
         if extension_checker(file_name) is True:
             return extension
@@ -59,8 +58,8 @@ def sanitize_file_format(file_format):
 
     if re.match(r"^\.?[a-zA-Z\d]+$", file_format) is None:
         raise NameError(
-            "read_structure_step: the file format %s could not be validated" %
-            file_format
+            "read_structure_step: the file format %s could not be validated"
+            % file_format
         )
 
     file_format = file_format.lower()

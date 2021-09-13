@@ -11,11 +11,11 @@ creating the graphical and non-graphical nodes.
 import read_structure_step
 
 
-class ReadStructureStep(object):
+class WriteStructureStep(object):
     my_description = {
-        "description": ("An interface for Read Structure"),
+        "description": ("An interface for Write Structure"),
         "group": "Data",
-        "name": "Read Structure",
+        "name": "Write Structure",
     }
     """The description needs three fields:
 
@@ -40,12 +40,12 @@ class ReadStructureStep(object):
 
     def description(self):
         """Return a description of what this extension does"""
-        return ReadStructureStep.my_description
+        return WriteStructureStep.my_description
 
     def create_node(self, flowchart=None, **kwargs):
         """Create and return the new node object."""
-        return read_structure_step.ReadStructure(flowchart=flowchart, **kwargs)
+        return read_structure_step.WriteStructure(flowchart=flowchart, **kwargs)
 
     def create_tk_node(self, canvas=None, **kwargs):
         """Create and return the graphical Tk node object."""
-        return read_structure_step.TkReadStructure(canvas=canvas, **kwargs)
+        return read_structure_step.TkWriteStructure(canvas=canvas, **kwargs)

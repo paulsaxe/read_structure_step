@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Control parameters for the Read Structure step in a SEAMM flowchart
+Control parameters for the Write Structure step in a SEAMM flowchart
 """
 
 import logging
@@ -11,11 +11,11 @@ import seamm
 logger = logging.getLogger(__name__)
 
 
-_filetypes = sorted(formats.registries.REGISTERED_READERS.keys())
+_filetypes = sorted(formats.registries.REGISTERED_WRITERS.keys())
 
 
-class ReadStructureParameters(seamm.Parameters):
-    """The control parameters for Read Structure
+class WriteStructureParameters(seamm.Parameters):
+    """The control parameters for Write Structure
 
     This is a dictionary of Parameters objects, which themselves are
     dictionaries.  You need to replace the 'time' example below with one or
@@ -44,8 +44,8 @@ class ReadStructureParameters(seamm.Parameters):
             "default_units": "",
             "enumeration": tuple(),
             "format_string": "s",
-            "description": "Structure file:",
-            "help_text": ("The file containing the structure."),
+            "description": "File:",
+            "help_text": ("The file to write."),
         },
         "file type": {
             "default": "from extension",
@@ -56,23 +56,30 @@ class ReadStructureParameters(seamm.Parameters):
             "description": "Type of file:",
             "help_text": ("The type of file, overrides the extension"),
         },
-        "add hydrogens": {
-            "default": "yes",
-            "kind": "bool",
+        "remove hydrogens": {
+            "default": "no",
+            "kind": "enum",
             "default_units": "",
-            "enumeration": ("yes", "no"),
+            "enumeration": ("no", "nonpolar", "all"),
             "format_string": "s",
-            "description": "Add hydrogens:",
-            "help_text": ("Whether to add missing hydrogen atoms."),
+            "description": "Remove hydrogens:",
+            "help_text": (
+                "Whether to remove hydrogen atoms before writing, and if so, just the "
+                "nonpolar ones or all."
+            ),
         },
-        "indices": {
-            "default": "1:end",
+        "structures": {
+            "default": "current configuration",
             "kind": "string",
             "default_units": "",
-            "enumeration": tuple(),
+            "enumeration": (
+                "current configuration",
+                "all configurations of current system",
+                "all systems",
+            ),
             "format_string": "s",
-            "description": "Structures to read:",
-            "help_text": ("The set of structures to read"),
+            "description": "Structures to write:",
+            "help_text": ("The set of structures to write"),
         },
     }
 
@@ -87,12 +94,11 @@ class ReadStructureParameters(seamm.Parameters):
                 for updating the current, default values.
         """
 
-        logger.debug("ReadStructureParameters.__init__")
+        logger.debug("WriteStructureParameters.__init__")
 
         super().__init__(
             defaults={
-                **ReadStructureParameters.parameters,
-                **seamm.standard_parameters.structure_handling_parameters,
+                **WriteStructureParameters.parameters,
                 **defaults,
             },
             data=data,

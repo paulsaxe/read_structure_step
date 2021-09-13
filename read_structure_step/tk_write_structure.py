@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 
-"""The graphical part of a Read Structure step"""
+"""The graphical part of a Write Structure step"""
 
 from pathlib import PurePath
 import pprint  # noqa: F401
 import tkinter as tk
-import tkinter.ttk as ttk
 
 from .formats.registries import get_format_metadata
 import seamm
@@ -13,8 +12,8 @@ from seamm_util import ureg, Q_, units_class  # noqa: F401
 import seamm_widgets as sw
 
 
-class TkReadStructure(seamm.TkNode):
-    """The graphical part of a Read Structure step in a flowchart."""
+class TkWriteStructure(seamm.TkNode):
+    """The graphical part of a Write Structure step in a flowchart."""
 
     def __init__(
         self, tk_flowchart=None, node=None, canvas=None, x=None, y=None, w=200, h=50
@@ -39,38 +38,12 @@ class TkReadStructure(seamm.TkNode):
 
     def create_dialog(self):
         """Create a dialog for editing the control parameters"""
-        frame = super().create_dialog("Read Structure Step")
-
-        # Create two frames, one for the filename, etc and one for where to put the
-        # structure.
-        frame1 = self["filename frame"] = ttk.LabelFrame(
-            frame,
-            borderwidth=4,
-            relief="sunken",
-            text="File to Read",
-            labelanchor="n",
-            padding=10,
-        )
-        frame2 = self["handling frame"] = ttk.LabelFrame(
-            frame,
-            borderwidth=4,
-            relief="sunken",
-            text="How to handle the structure(s)",
-            labelanchor="n",
-            padding=10,
-        )
+        frame = super().create_dialog("Write Structure Step")
 
         # Create the widgets
         P = self.node.parameters
-        for key in ("file", "file type", "indices", "add hydrogens"):
-            self[key] = P[key].widget(frame1)
-        for key in (
-            "structure handling",
-            "subsequent structure handling",
-            "system name",
-            "configuration name",
-        ):
-            self[key] = P[key].widget(frame2)
+        for key in P:
+            self[key] = P[key].widget(frame)
 
         # Set bindings
         for name in ("file", "file type"):
@@ -78,12 +51,6 @@ class TkReadStructure(seamm.TkNode):
             combobox.bind("<<ComboboxSelected>>", self.reset_dialog)
             combobox.bind("<Return>", self.reset_dialog)
             combobox.bind("<FocusOut>", self.reset_dialog)
-
-        # Put in the widgets that are always present
-        frame1.grid(row=0, sticky=tk.EW)
-        frame2.grid(row=1, sticky=tk.EW)
-
-        frame.columnconfigure(0, weight=1)
 
         # and lay the widgets out
         self.reset_dialog()
@@ -96,13 +63,9 @@ class TkReadStructure(seamm.TkNode):
         is controlled by values of some of the control parameters.
         """
 
-        ##########################
-        # Handle the first frame #
-        ##########################
-
         # Remove any widgets previously packed
-        frame1 = self["filename frame"]
-        for slave in frame1.grid_slaves():
+        frame = self["frame"]
+        for slave in frame.grid_slaves():
             slave.grid_forget()
 
         # What type of file?
@@ -136,9 +99,8 @@ class TkReadStructure(seamm.TkNode):
 
         items = []
         if extension == "all" or not metadata["single_structure"]:
-            items.append("indices")
-        if extension == "all" or metadata["add_hydrogens"]:
-            items.append("add hydrogens")
+            items.append("structures")
+        items.append("remove hydrogens")
         if len(items) > 0:
             widgets = []
             for item in items:
@@ -148,37 +110,8 @@ class TkReadStructure(seamm.TkNode):
             sw.align_labels(widgets)
 
         # Set the widths and expansion
-        frame1.columnconfigure(0, minsize=50)
-        frame1.columnconfigure(1, weight=1)
-
-        ###############################
-        # Now handle the second frame #
-        ###############################
-
-        # Remove any widgets previously packed
-        frame2 = self["handling frame"]
-        for slave in frame2.grid_slaves():
-            slave.grid_forget()
-
-        # Grid the needed widgets
-        if extension == "all" or not metadata["single_structure"]:
-            items = (
-                "structure handling",
-                "subsequent structure handling",
-                "system name",
-                "configuration name",
-            )
-        else:
-            items = ("structure handling", "system name", "configuration name")
-
-        widgets = []
-        row = 0
-        for item in items:
-            self[item].grid(row=row, sticky=tk.EW)
-            widgets.append(self[item])
-            row += 1
-        frame2.columnconfigure(0, weight=1)
-        sw.align_labels(widgets)
+        frame.columnconfigure(0, minsize=50)
+        frame.columnconfigure(1, weight=1)
 
     def right_click(self, event):
         """Probably need to add our dialog..."""

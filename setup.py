@@ -55,15 +55,17 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     entry_points={
-        'org.molssi.seamm': [
-            'Read Structure = read_structure_step:ReadStructureStep',
+        "org.molssi.seamm": [
+            "Read Structure = read_structure_step:ReadStructureStep",
+            "Write Structure = read_structure_step:WriteStructureStep",
         ],
-        'org.molssi.seamm.tk': [
-            'Read Structure = read_structure_step:ReadStructureStep',
+        "org.molssi.seamm.tk": [
+            "Read Structure = read_structure_step:ReadStructureStep",
+            "Write Structure = read_structure_step:WriteStructureStep",
         ],
     }
 )
