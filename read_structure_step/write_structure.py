@@ -140,7 +140,7 @@ class WriteStructure(seamm.Node):
         system_db = self.get_variable("_system_db")
         system, configuration = self.get_system_configuration(P)
 
-        structures = P("structures")
+        structures = P["structures"]
         if structures == "current configuration":
             configurations = [configuration]
         elif structures == "all configurations of current system":
