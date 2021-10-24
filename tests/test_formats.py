@@ -344,6 +344,10 @@ def test_mopac_7(configuration):
     assert smiles == check_smiles
 
 
+@pytest.mark.skipif(
+    read_structure_step.formats.mop.find_mopac.find_mopac() is None,
+    reason="MOPAC could not be found",
+)
 def test_mopac_8(configuration):
     check_symbols = [
         "C",
