@@ -2,6 +2,7 @@
 Implementation of the reader for SMILES files using OpenBabel
 """
 
+import logging
 from pathlib import Path
 import shutil
 import string
@@ -13,6 +14,8 @@ from openbabel import openbabel
 from ..registries import register_format_checker
 from ..registries import register_reader
 from ..registries import set_format_metadata
+
+logger = logging.getLogger("read_structure_step.read_structure")
 
 if "OpenBabel_version" not in globals():
     OpenBabel_version = None
@@ -158,12 +161,19 @@ def load_mol2(
         if not not_done:
             break
 
+        logger.debug(f" {structure_no}: {obMol.GetTitle()}")
+
         if add_hydrogens:
             obMol.AddHydrogens()
 
         # Get coordinates for a 3-D structure
         builder = openbabel.OBBuilder()
         builder.Build(obMol)
+
+        logger.debug(
+            f"\tcharge={obMol.GetTotalCharge()} "
+            f"multiplicity={obMol.GetTotalSpinMultiplicity()}"
+        )
 
         if structure_no > 1:
             if subsequent_as_configurations:
