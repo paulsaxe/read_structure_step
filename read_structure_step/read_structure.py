@@ -12,7 +12,7 @@ directory, and is used for all normal output from this step.
 """
 
 import logging
-from pathlib import PurePath
+from pathlib import PurePath, Path
 
 from .formats.registries import get_format_metadata
 import read_structure_step
@@ -84,7 +84,10 @@ class ReadStructure(seamm.Node):
 
         # What type of file?
         extension = ""
-        filename = P["file"].strip()
+        if isinstance(P["file"], Path):
+            filename = str(P["file"])
+        else:
+            filename = P["file"].strip()
         file_type = P["file type"]
 
         if self.is_expr(filename) or self.is_expr(file_type):
@@ -119,7 +122,10 @@ class ReadStructure(seamm.Node):
         )
 
         # What type of file?
-        filename = P["file"].strip()
+        if isinstance(P["file"], Path):
+            filename = str(P["file"])
+        else:
+            filename = ["file"].strip()
         file_type = P["file type"]
 
         if file_type != "from extension":
