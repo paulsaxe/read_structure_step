@@ -13,6 +13,7 @@ directory, and is used for all normal output from this step.
 
 import logging
 from pathlib import PurePath, Path
+import textwrap
 
 from .formats.registries import get_format_metadata
 import read_structure_step
@@ -110,7 +111,8 @@ class ReadStructure(seamm.Node):
         else:
             text += seamm.standard_parameters.structure_handling_description(P)
 
-        return text
+        text = textwrap.fill(text, initial_indent=4 * " ", subsequent_indent=4 * " ")
+        return self.header + "\n" + text
 
     def run(self):
         """Run a Read Structure step."""
@@ -141,7 +143,7 @@ class ReadStructure(seamm.Node):
             P["file type"] = extension
 
         # Print what we are doing
-        printer.important(__(self.description_text(P), indent=4 * " "))
+        printer.important(self.description_text(P))
 
         # Read the file into the system
         system_db = self.get_variable("_system_db")
@@ -168,15 +170,31 @@ class ReadStructure(seamm.Node):
         )
 
         # Finish the output
-        printer.important(
-            __(
-                f"\n    Created a molecular structure with {configuration.n_atoms} "
-                "atoms."
-                f"\n           System name = {system.name}"
-                f"\n    Configuration name = {configuration.name}",
-                indent=4 * " ",
+        if configuration.periodicity == 3:
+            space_group = configuration.symmetry.group
+            if space_group == "":
+                symmetry_info = ""
+            else:
+                symmetry_info = f" The space group is {space_group}."
+            printer.important(
+                __(
+                    f"\n    Created a periodic structure with {configuration.n_atoms} "
+                    f"atoms.{symmetry_info}"
+                    f"\n           System name = {system.name}"
+                    f"\n    Configuration name = {configuration.name}",
+                    indent=4 * " ",
+                )
             )
-        )
+        else:
+            printer.important(
+                __(
+                    f"\n    Created a molecular structure with {configuration.n_atoms} "
+                    "atoms."
+                    f"\n           System name = {system.name}"
+                    f"\n    Configuration name = {configuration.name}",
+                    indent=4 * " ",
+                )
+            )
         printer.important("")
 
         return next_node
