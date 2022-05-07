@@ -181,6 +181,9 @@ class ReadStructure(seamm.Node):
             )
 
             # Finish the output
+            system, configuration = self.get_system_configuration(
+                P, structure_handling=False
+            )
             if configuration.periodicity == 3:
                 space_group = configuration.symmetry.group
                 if space_group == "":
@@ -200,7 +203,7 @@ class ReadStructure(seamm.Node):
                 printer.important(
                     __(
                         "\n    Created a molecular structure with "
-                        "{configuration.n_atoms} atoms."
+                        f"{configuration.n_atoms} atoms."
                         f"\n           System name = {system.name}"
                         f"\n    Configuration name = {configuration.name}",
                         indent=4 * " ",
